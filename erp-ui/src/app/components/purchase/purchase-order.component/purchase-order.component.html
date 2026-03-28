@@ -1,0 +1,64 @@
+<div class="card shadow-sm m-4">
+  <div class="card-header bg-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Purchase Orders</h5>
+    <button class="btn btn-primary" (click)="openDialog()">+ New Purchase</button>
+  </div>
+  <div class="card-body">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Invoice</th>
+          <th>Supplier</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th class="text-center">Action</th>
+          <th>Details/Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of orders(); track $index) {
+        <tr>
+          <td>{{$index + 1}}</td>
+          <td><code>{{p.invoiceNumber}}</code></td>
+          <td>{{p.supplier?.name}}</td>
+          <td>{{p.created_at | date}}</td>
+          <td>{{p.totalAmount | number}}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+                'bg-warning': p.status === 'PENDING',
+                'bg-info': p.status === 'APPROVED',
+                'bg-success': p.status === 'RECEIVED',
+                'bg-danger': p.status === 'CANCELED'
+              }">{{p.status}}</span>
+          </td>
+          <td class="text-center">
+            <div class="btn-group">
+              <!-- Pending Button: Always disabled, sudhu PENDING status-e thakle highlight hobe -->
+              <button class="btn btn-sm btn-outline-warning" [disabled]="true">Pending</button>
+
+              <!-- Approve Button: Sudhu PENDING status-e thakle enable hobe -->
+              <button class="btn btn-sm btn-outline-info" [disabled]="p.status !== 'PENDING'"
+                (click)="updateStatus(p, 'APPROVED')">Approve</button>
+
+              <!-- Receive Button: Sudhu APPROVED status-e thakle enable hobe -->
+              <button class="btn btn-sm btn-outline-success" [disabled]="p.status !== 'APPROVED'"
+                (click)="updateStatus(p, 'RECEIVED')">Receive</button>
+
+              <!-- Cancel Button: RECEIVED ba CANCELED obosthay disabled thakbe, baki sob somoy enabled -->
+              <button class="btn btn-sm btn-outline-danger"
+                [disabled]="p.status === 'RECEIVED' || p.status === 'CANCELED'"
+                (click)="updateStatus(p, 'CANCELED')">Cancel</button>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary" (click)="openViewDialog(p.id)">View</button>
+            <button class="btn btn-sm btn-outline-dark">Print</button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,203 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side" opened class="custom-sidenav">
+
+    <div class="logo text-center py-3 fw-bold">
+      NoyonTrade ERP
+    </div>
+
+    <!-- ADMIN MENU -->
+    <mat-nav-list>
+
+      <!-- Dashboard -->
+      <a mat-list-item routerLink="admin_dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        <span class="ms-2">Dashboard</span>
+      </a>
+
+      <!-- Inventory / Products -->
+      <mat-expansion-panel [expanded]="activeMenu === 'Inventory'" (opened)="setActive('Inventory')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>inventory_2</mat-icon>
+            <span class="ms-2">Inventory</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <a mat-list-item routerLink="products">
+          <mat-icon>inventory</mat-icon>
+          <span class="ms-2">Product List</span>
+        </a>
+
+        <a mat-list-item routerLink="stock-adjustment">
+          <mat-icon>inventory_2</mat-icon>
+          <span class="ms-2">Stock Adjustment</span>
+        </a>
+
+        <a mat-list-item routerLink="product-category">
+          <mat-icon>category</mat-icon>
+          <span class="ms-2">Categories</span>
+        </a>
+      </mat-expansion-panel>
+
+      <!-- Purchase / Supplier Management -->
+      <mat-expansion-panel [expanded]="activeMenu === 'Purchase'" (opened)="setActive('Purchase')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>shopping_cart</mat-icon>
+            <span class="ms-2">Purchase Management</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <a mat-list-item routerLink="suppliers.component">
+          <mat-icon>group</mat-icon>
+          <span class="ms-2">Suppliers</span>
+        </a>
+
+        <a mat-list-item routerLink="purchase-order.component">
+          <mat-icon>shopping_basket</mat-icon>
+          <span class="ms-2">Purchase Orders</span>
+        </a>
+
+        <a mat-list-item routerLink="stockin.component">
+          <mat-icon>inventory</mat-icon>
+          <span class="ms-2">Stock-In Confirmation</span>
+        </a>
+      </mat-expansion-panel>
+
+      <!-- Customers -->
+      <mat-expansion-panel [expanded]="activeMenu === 'Customers'" (opened)="setActive('Customers')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>people_alt</mat-icon>
+            <span class="ms-2">Customer Management</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <a mat-list-item routerLink="customers.component">
+          <mat-icon>person</mat-icon>
+          <span class="ms-2">Customer List</span>
+        </a>
+      </mat-expansion-panel>
+
+      <!-- Payments & Ledger -->
+      <mat-expansion-panel [expanded]="activeMenu === 'Accounts'" (opened)="setActive('Accounts')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>account_balance</mat-icon>
+            <span class="ms-2">Accounts</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <a mat-list-item routerLink="payments.component">
+          <mat-icon>payments</mat-icon>
+          <span class="ms-2">Approve Payments</span>
+        </a>
+
+        <a mat-list-item routerLink="ledger.component">
+          <mat-icon>account_balance_wallet</mat-icon>
+          <span class="ms-2">Ledger</span>
+        </a>
+
+        <a mat-list-item routerLink="reports.component">
+          <mat-icon>bar_chart</mat-icon>
+          <span class="ms-2">Reports</span>
+        </a>
+      </mat-expansion-panel>
+
+      <!-- Payroll Approval -->
+      <mat-expansion-panel [expanded]="activeMenu === 'Payroll'" (opened)="setActive('Payroll')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>badge</mat-icon>
+            <span class="ms-2">Payroll Approval</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <a mat-list-item routerLink="payroll-approval.component">
+          <mat-icon>check_circle</mat-icon>
+          <span class="ms-2">Approve Payroll</span>
+        </a>
+      </mat-expansion-panel>
+
+      <!-- System Settings -->
+      <a mat-list-item routerLink="system-settings" (opened)="setActive('Settings')">
+        <mat-icon>settings</mat-icon>
+        <span class="ms-2">System Settings</span>
+      </a>
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- MAIN CONTENT -->
+  <mat-sidenav-content>
+
+    <!-- TOP BAR -->
+    <mat-toolbar class="topbar shadow-sm">
+      <div class="d-flex align-items-center w-100">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <span class="ms-2 fw-bold text-primary">
+          NoyonTrade ERP
+          <small class="text-muted fw-light">BD</small>
+        </span>
+
+        <span class="spacer"></span>
+
+        <div class="search-bar d-none d-md-block me-3">
+          <input type="text" class="form-control form-control-sm" placeholder="Search Product / Supplier / Customer...">
+        </div>
+
+        <!-- PROFILE MENU -->
+        <button 
+          mat-icon-button 
+          [matMenuTriggerFor]="profileMenu"
+          aria-label="Admin profile menu"
+          class="profile-btn"
+        >
+
+          @if (userPhotoUrl) {
+            <img 
+              [src]="userPhotoUrl" 
+              alt="Admin photo" 
+              class="rounded-circle avatar-img" 
+              width="32" 
+              height="32"
+            />
+          } @else {
+            <div 
+              class="avatar-initials rounded-circle d-flex align-items-center justify-content-center"
+              [style.backgroundColor]="avatarBgColor"
+            >
+              {{ userInitials }}
+            </div>
+          }
+
+          <mat-icon class="ms-1">arrow_drop_down</mat-icon>
+        </button>
+
+        <mat-menu #profileMenu="matMenu" xPosition="before">
+          <button mat-menu-item (click)="onProfile()" routerLink="profile.component">
+            <mat-icon>account_circle</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item (click)="onSettings()">
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()" class="text-danger">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+
+    <div class="container-fluid mt-3">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

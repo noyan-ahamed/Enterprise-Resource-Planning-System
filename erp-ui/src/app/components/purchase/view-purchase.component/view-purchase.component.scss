@@ -1,0 +1,9 @@
+.custom-dialog-container .mat-dialog-container {
+  padding: 1rem;       /* কম padding */
+  border-radius: 8px;  /* সুন্দর rounded corner */
+}
+
+.table-responsive {
+  max-height: 60vh;   /* table scrollable যদি height বেশি হয় */
+  overflow-y: auto;
+}

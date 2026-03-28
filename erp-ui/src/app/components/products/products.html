@@ -1,0 +1,161 @@
+<div class="container-fluid p-4">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold text-primary mb-0">Product Inventory</h3>
+
+    <button mat-raised-button color="primary" (click)="toggleForm()">
+      {{ showForm ? 'Close' : 'Add Product' }}
+    </button>
+  </div>
+
+  <!-- FORM -->
+  @if (showForm) {
+    <mat-card class="mb-4 shadow rounded-4 border-0">
+      <mat-card-content>
+
+        <form [formGroup]="productForm" (ngSubmit)="saveProduct()">
+
+          <div class="row g-3">
+
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name">
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-2">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>SKU</mat-label>
+                <input matInput formControlName="sku">
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="category">
+                  @for (c of categories(); track c.id) {
+                    <mat-option [value]="c">{{ c.name }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-2"> <mat-form-field appearance="outline" class="w-100"> <mat-label>Selling Price (৳)</mat-label> <input matInput type="number" formControlName="sellingPrice"> </mat-form-field> </div>
+
+            <div class="col-md-2">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Min Stock</mat-label>
+                <input matInput type="number" formControlName="minStockLevel">
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-2">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option value="ACTIVE">Active</mat-option>
+                  <mat-option value="INACTIVE">Inactive</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-center justify-content-end gap-2">
+              <button mat-flat-button color="primary" type="submit">
+                {{ isEditing ? 'Update' : 'Save' }}
+              </button>
+              <button mat-stroked-button type="button" (click)="resetForm()">Cancel</button>
+            </div>
+
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- TABLE -->
+  <mat-card class="shadow rounded-4 border-0 overflow-hidden">
+
+    <div class="p-3 bg-primary text-white d-flex justify-content-between">
+      <h5 class="mb-0">Product List</h5>
+
+      <!-- <input class="form-control w-auto"
+             placeholder="Search..."
+             (keyup)="applyFilter($event)"> -->
+    </div>
+
+    <div class="table-responsive">
+      <table class="table mb-0 align-middle">
+
+        <thead class="table-light">
+          <tr>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (p of dataSource(); track p.id; let i = $index) {
+            <tr [ngClass]="i % 2 === 0 ? 'bg-white' : 'bg-light'">
+
+              <td><code class="text-primary">{{ p.sku }}</code></td>
+
+              <td class="fw-semibold">{{ p.name }}</td>
+
+              <td>
+                <span class="badge bg-info-subtle text-dark border">
+                  {{ p.category?.name || 'N/A' }}
+                </span>
+              </td>
+
+              <!-- Quantity optional -->
+              <td>
+                {{p.stock}}
+              </td>
+
+              <td class="text-success fw-semibold">
+                ৳{{ p.sellingPrice }}
+              </td>
+
+              <td>
+                <span class="badge"
+                      [ngClass]="p.status === 'ACTIVE' ? 'bg-success' : 'bg-secondary'">
+                  {{ p.status }}
+                </span>
+              </td>
+
+              <td class="text-end">
+                <button mat-icon-button color="primary" (click)="editProduct(p)">
+                  ✏️
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteProduct(p.id)">
+                  🗑
+                </button>
+              </td>
+
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+    </div>
+
+    @if (dataSource().length === 0) {
+      <div class="p-4 text-center text-muted">
+        No products found
+      </div>
+    }
+
+  </mat-card>
+
+</div>

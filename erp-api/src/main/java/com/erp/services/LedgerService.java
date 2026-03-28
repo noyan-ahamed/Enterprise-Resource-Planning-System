@@ -1,0 +1,11 @@
+package com.erp.services;
+
+import com.erp.enities.PurchaseOrderHeader;
+import com.erp.enities.SupplierPayment;
+
+public interface LedgerService {
+
+    void createSupplierPurchaseEntry(PurchaseOrderHeader order);
+
+    void createSupplierPaymentEntry(SupplierPayment payment);
+}

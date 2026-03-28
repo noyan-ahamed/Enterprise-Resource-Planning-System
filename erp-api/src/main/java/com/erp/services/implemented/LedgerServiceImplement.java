@@ -1,0 +1,53 @@
+package com.erp.services.implemented;
+
+import com.erp.enities.PartyLedgerEntry;
+import com.erp.enities.PurchaseOrderHeader;
+import com.erp.enities.SupplierPayment;
+import com.erp.enums.LedgerTransactionType;
+import com.erp.enums.PartyType;
+import com.erp.repositories.PartyLedgerEntryRepository;
+import com.erp.services.LedgerService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Service
+@RequiredArgsConstructor
+public class LedgerServiceImplement implements LedgerService {
+
+    private final PartyLedgerEntryRepository ledgerRepo;
+
+    @Override
+    public void createSupplierPurchaseEntry(PurchaseOrderHeader order) {
+        PartyLedgerEntry entry = new PartyLedgerEntry();
+        entry.setEntryDate(LocalDate.now());
+        entry.setPartyType(PartyType.SUPPLIER);
+        entry.setPartyId(order.getSupplier().getId());
+        entry.setTransactionType(LedgerTransactionType.PURCHASE);
+        entry.setReferenceType("PURCHASE_ORDER");
+        entry.setReferenceId(order.getId());
+        entry.setDebitAmount(BigDecimal.ZERO);
+        entry.setCreditAmount(order.getTotalAmount());
+        entry.setRemarks("Purchase received - " + order.getInvoiceNumber());
+
+        ledgerRepo.save(entry);
+    }
+
+    @Override
+    public void createSupplierPaymentEntry(SupplierPayment payment) {
+        PartyLedgerEntry entry = new PartyLedgerEntry();
+        entry.setEntryDate(payment.getPaymentDate());
+        entry.setPartyType(PartyType.SUPPLIER);
+        entry.setPartyId(payment.getSupplier().getId());
+        entry.setTransactionType(LedgerTransactionType.PAYMENT);
+        entry.setReferenceType("SUPPLIER_PAYMENT");
+        entry.setReferenceId(payment.getId());
+        entry.setDebitAmount(payment.getAmount());
+        entry.setCreditAmount(BigDecimal.ZERO);
+        entry.setRemarks("Supplier payment - " + payment.getVoucherNo());
+
+        ledgerRepo.save(entry);
+    }
+}

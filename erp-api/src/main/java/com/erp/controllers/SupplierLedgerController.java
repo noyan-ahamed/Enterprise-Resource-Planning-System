@@ -24,4 +24,10 @@ public class SupplierLedgerController {
     public SupplierDueSummaryDTO getSupplierDueSummary(@PathVariable Long supplierId) {
         return supplierLedgerService.getSupplierDueSummary(supplierId);
     }
+
+
+    @GetMapping("/due-summary")
+    public List<SupplierDueSummaryDTO> getAllSupplierDueSummaries() {
+        return supplierLedgerService.getAllSupplierDueSummaries();
+    }
 }

@@ -10,4 +10,6 @@ public interface SupplierLedgerService {
     List<SupplierLedgerResponseDTO> getSupplierLedger(Long supplierId);
 
     SupplierDueSummaryDTO getSupplierDueSummary(Long supplierId);
+    List<SupplierDueSummaryDTO> getAllSupplierDueSummaries();
+
 }

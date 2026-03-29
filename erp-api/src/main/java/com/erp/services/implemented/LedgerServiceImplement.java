@@ -8,10 +8,12 @@ import com.erp.enums.PartyType;
 import com.erp.repositories.PartyLedgerEntryRepository;
 import com.erp.services.LedgerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +51,10 @@ public class LedgerServiceImplement implements LedgerService {
         entry.setRemarks("Supplier payment - " + payment.getVoucherNo());
 
         ledgerRepo.save(entry);
+    }
+
+    @Override
+    public List<PartyLedgerEntry> getAllLedger() {
+        return ledgerRepo.findAll(Sort.by(Sort.Direction.ASC,"id"));
     }
 }

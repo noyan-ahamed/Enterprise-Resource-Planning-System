@@ -104,4 +104,48 @@ public class SupplierLedgerServiceImplement implements SupplierLedgerService {
 
         return null;
     }
+
+
+
+
+    //get all due with supplier
+    @Override
+    public List<SupplierDueSummaryDTO> getAllSupplierDueSummaries() {
+        List<Supplier> suppliers = supplierRepo.findAll();
+
+        List<SupplierDueSummaryDTO> summaryList = new ArrayList<>();
+
+        for (Supplier supplier : suppliers) {
+            List<PartyLedgerEntry> entries =
+                    ledgerRepo.findByPartyTypeAndPartyIdOrderByEntryDateAscIdAsc(PartyType.SUPPLIER, supplier.getId());
+
+            BigDecimal totalPurchase = BigDecimal.ZERO;
+            BigDecimal totalPayment = BigDecimal.ZERO;
+
+            for (PartyLedgerEntry entry : entries) {
+                if (entry.getTransactionType() == LedgerTransactionType.PURCHASE) {
+                    totalPurchase = totalPurchase.add(entry.getCreditAmount());
+                }
+                if (entry.getTransactionType() == LedgerTransactionType.PAYMENT) {
+                    totalPayment = totalPayment.add(entry.getDebitAmount());
+                }
+            }
+
+            BigDecimal currentDue = totalPurchase.subtract(totalPayment);
+
+            SupplierDueSummaryDTO dto = new SupplierDueSummaryDTO();
+            dto.setSupplierId(supplier.getId());
+            dto.setSupplierName(supplier.getName());
+            dto.setCompanyName(supplier.getCompanyName());
+            dto.setMobileNumber(supplier.getMobileNumber());
+            dto.setTotalPurchase(totalPurchase);
+            dto.setTotalPayment(totalPayment);
+            dto.setCurrentDue(currentDue);
+
+            summaryList.add(dto);
+        }
+
+        return summaryList;
+    }
+
 }

@@ -4,15 +4,17 @@ import { ProductCategory } from './components/product-category/product-category'
 import { SuppliersComponent } from './components/suppliers/suppliers.component/suppliers.component';
 import { PurchaseOrderComponent } from './components/purchase/purchase-order.component/purchase-order.component';
 import { Products } from './components/products/products';
+import { SupplierLedgerComponent } from './components/supplier-ledger/supplier-ledger.component/supplier-ledger.component';
+import { SupplierLedgerDetailsComponent } from './components/supplier-ledger/supplier-ledger-details.component/supplier-ledger-details.component';
 
 export const routes: Routes = [
     {
-        path:'',
-        redirectTo:"admin-layout",
-        pathMatch:"full"
+        path: '',
+        redirectTo: "admin-layout",
+        pathMatch: "full"
     },
     {
-        path:'admin-layout',
+        path: 'admin-layout',
         component: AdminLayout,
         children: [
             {
@@ -30,6 +32,17 @@ export const routes: Routes = [
             {
                 path: 'products',
                 component: Products
+            },
+            // Supplier Ledger Summary Page
+            {
+                path: 'supplier-ledger',
+                component: SupplierLedgerComponent
+            },
+
+            // Supplier Ledger Details Page
+            {
+                path: 'supplier-ledger/:id',
+                component: SupplierLedgerDetailsComponent
             }
         ]
     }

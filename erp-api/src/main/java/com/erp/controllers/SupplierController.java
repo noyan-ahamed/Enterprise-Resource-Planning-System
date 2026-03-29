@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/supplier")
@@ -21,6 +22,11 @@ public class SupplierController {
     public ResponseEntity<List<Supplier>> getAllSupplier(){
         List<Supplier> suppliers = supplierService.getAllSupliers();
         return ResponseEntity.ok(suppliers);
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Supplier> getSupplierById(@PathVariable long id){
+        return supplierService.getSupplierById(id);
     }
 
     @PostMapping("/create-supplier")

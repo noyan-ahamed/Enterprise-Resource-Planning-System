@@ -6,17 +6,17 @@
     </button>
   </div>
 
-  <div class="card shadow-sm border-0 rounded-4 mb-4" *ngIf="supplierSummary">
+  <div class="card shadow-sm border-0 rounded-4 mb-4" *ngIf="supplierSummary()">
     <div class="card-body p-4">
       <div class="row g-4 align-items-center">
 
         <div class="col-lg-4">
-          <h3 class="fw-bold mb-2">{{ supplierSummary?.supplierName }}</h3>
+          <h3 class="fw-bold mb-2">{{ supplierSummary()?.supplierName }}</h3>
           <p class="mb-1 text-muted">
-            <strong>Company:</strong> {{ supplierDetail?.companyName || '—' }}
+            <strong>Company:</strong> {{ supplierDetail()?.companyName || '—' }}
           </p>
           <p class="mb-1 text-muted">
-            <strong>Mobile:</strong> {{ supplierDetail?.mobileNumber || '—' }}
+            <strong>Mobile:</strong> {{ supplierDetail()?.mobileNumber || '—' }}
           </p>
         </div>
 
@@ -26,21 +26,21 @@
             <div class="col-md-4">
               <div class="summary-box">
                 <small>Total Purchase</small>
-                <h5 class="mb-0">{{ supplierSummary?.totalPurchase | number:'1.2-2' }}</h5>
+                <h5 class="mb-0">{{ supplierSummary()?.totalPurchase | number:'1.2-2' }}</h5>
               </div>
             </div>
 
             <div class="col-md-4">
               <div class="summary-box">
                 <small>Total Payment</small>
-                <h5 class="mb-0">{{ supplierSummary?.totalPayment | number:'1.2-2' }}</h5>
+                <h5 class="mb-0">{{ supplierSummary()?.totalPayment | number:'1.2-2' }}</h5>
               </div>
             </div>
 
             <div class="col-md-4">
               <div class="summary-box due-box">
                 <small>Current Due</small>
-                <h5 class="mb-0">{{ supplierSummary?.currentDue | number:'1.2-2' }}</h5>
+                <h5 class="mb-0">{{ supplierSummary()?.currentDue | number:'1.2-2' }}</h5>
               </div>
             </div>
 
@@ -99,7 +99,7 @@
               <td>{{ entry.remarks }}</td>
             </tr>
 
-            <tr *ngIf="ledgerEntries.length === 0">
+            <tr *ngIf="ledgerEntries().length === 0">
               <td colspan="7" class="text-center py-4 text-muted">
                 No ledger entries found.
               </td>
@@ -115,7 +115,7 @@
 <app-supplier-payment-modal
   [isOpen]="isPaymentModalOpen"
   [supplierId]="supplierId"
-  [supplierName]="supplierSummary?.supplierName || 'Supplier'"
+  [supplierName]="supplierSummary()?.supplierName || 'Supplier'"
   (closeModal)="closePaymentModal()"
   (paymentSaved)="onPaymentSaved()">
 </app-supplier-payment-modal>

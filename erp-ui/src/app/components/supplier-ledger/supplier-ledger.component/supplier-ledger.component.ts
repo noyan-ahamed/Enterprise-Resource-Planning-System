@@ -42,7 +42,7 @@ export class SupplierLedgerComponent {
   }
 
   loadSummary(): void {
-    this.loading = true;
+    this.loading = false;
 
     this.supplierLedgerService.getSupplierLedgerSummary().subscribe({
       next: (res) => {
@@ -83,7 +83,7 @@ export class SupplierLedgerComponent {
   }
 
   viewLedger(supplierId: number): void {
-    this.router.navigate(['/admin-layout/supplier-ledger', supplierId]);
+    this.router.navigate(['/admin-layout/app-supplier-ledger-details', supplierId]);
   }
 
   openPaymentModal(supplier: SupplierLedgerSummary): void {

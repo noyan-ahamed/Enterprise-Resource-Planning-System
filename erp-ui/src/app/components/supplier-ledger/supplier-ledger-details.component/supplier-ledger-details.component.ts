@@ -23,8 +23,8 @@ export class SupplierLedgerDetailsComponent {
   supplierId!: number;
 
   ledgerEntries = signal<SupplierLedgerEntry[]>([]);
-  supplierSummary: SupplierLedgerSummary | null = null;
-  supplierDetail: SupplierDetail | null = null;
+ supplierSummary = signal<SupplierLedgerSummary | null>(null);
+supplierDetail = signal<SupplierDetail | null>(null);
 
   loading = false;
   isPaymentModalOpen = false;
@@ -55,13 +55,16 @@ export class SupplierLedgerDetailsComponent {
     });
 
     this.supplierLedgerService.getSupplierDueSummaryById(this.supplierId).subscribe({
-      next: (res) => this.supplierSummary = res,
-      error: (err) => console.error(err)
+      next: (res) => {
+        this.supplierSummary.set(res);
+        this.loading = false;
+      },
+      error: (err) => {console.error(err), this.loading = false;}
     });
 
     this.supplierLedgerService.getSupplierById(this.supplierId).subscribe({
-      next: (res) => this.supplierDetail = res,
-      error: (err) => console.warn('Supplier details not available', err)
+      next: (res) => {this.supplierDetail.set(res), this.loading = false;},
+      error: (err) => {console.warn('Supplier details not available', err), this.loading = false;}
     });
   }
 

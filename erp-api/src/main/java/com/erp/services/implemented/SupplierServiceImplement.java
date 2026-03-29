@@ -6,10 +6,10 @@ import com.erp.repositories.SupplierRepository;
 import com.erp.services.SupplierService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SupplierServiceImplement implements SupplierService {
@@ -53,6 +53,11 @@ public class SupplierServiceImplement implements SupplierService {
         supplier.setBkashNo(dto.getBkashNo());
 
         return supplierRepo.save(supplier);
+    }
+
+    @Override
+    public Optional<Supplier> getSupplierById(long id) {
+        return supplierRepo.findById(id);
     }
 
 }

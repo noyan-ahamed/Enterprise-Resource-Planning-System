@@ -1,12 +1,15 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { SupplierDetail, SupplierLedgerEntry, SupplierLedgerSummary, SupplierPayment, SupplierPaymentRequest } from "../models/supplier-ledger.model";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { SuppliersService } from "./suppliers.service";
 
 @Injectable({ providedIn: 'root' })
 export class SupplierLedgerService{
     
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = 'http://localhost:8080/supplier-ledger';
+  private paymentUrl = 'http://localhost:8080/supplier-payments'
+  private supplierapi = inject(SuppliersService)
 
   constructor(private http: HttpClient) {}
 
@@ -15,7 +18,7 @@ export class SupplierLedgerService{
   // ======================
   getSupplierLedgerSummary(): Observable<SupplierLedgerSummary[]> {
     return this.http.get<SupplierLedgerSummary[]>(
-      `${this.baseUrl}/supplier-ledger/due-summary`
+      `${this.baseUrl}/due-summary`
     );
   }
 
@@ -24,21 +27,19 @@ export class SupplierLedgerService{
   // ======================
   getSupplierLedgerById(supplierId: number): Observable<SupplierLedgerEntry[]> {
     return this.http.get<SupplierLedgerEntry[]>(
-      `${this.baseUrl}/supplier-ledger/${supplierId}`
+      `${this.baseUrl}/${supplierId}`
     );
   }
 
   getSupplierDueSummaryById(supplierId: number): Observable<SupplierLedgerSummary> {
     return this.http.get<SupplierLedgerSummary>(
-      `${this.baseUrl}/supplier-ledger/due-summary/${supplierId}`
+      `${this.baseUrl}/due-summary/${supplierId}`
     );
   }
 
   // optional - যদি supplier master api থাকে
   getSupplierById(supplierId: number): Observable<SupplierDetail> {
-    return this.http.get<SupplierDetail>(
-      `${this.baseUrl}/suppliers/${supplierId}`
-    );
+    return this.supplierapi.getSupplierById(supplierId);
   }
 
   // ======================
@@ -46,13 +47,13 @@ export class SupplierLedgerService{
   // ======================
   getSupplierPayments(supplierId: number): Observable<SupplierPayment[]> {
     return this.http.get<SupplierPayment[]>(
-      `${this.baseUrl}/supplier-payments/supplier/${supplierId}`
+      `${this.paymentUrl}/supplier/${supplierId}`
     );
   }
 
   createSupplierPayment(payload: SupplierPaymentRequest): Observable<any> {
     return this.http.post(
-      `${this.baseUrl}/supplier-payments`,
+      `${this.paymentUrl}`,
       payload
     );
   }

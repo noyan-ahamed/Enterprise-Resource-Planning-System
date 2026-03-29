@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CreateSupplier, Supplier, UpdateSupplier } from '../models/supplier.model';
+import { SupplierDetail } from '../models/supplier-ledger.model';
 
 @Injectable({ providedIn: 'root' })
 export class SuppliersService {
@@ -23,6 +24,11 @@ export class SuppliersService {
   //   return `SUP-${count.toString().padStart(4, '0')}`;
   // }
 
+   getSupplierById(supplierId: number): Observable<SupplierDetail> {
+      return this.http.get<SupplierDetail>(
+        `${this.baseUrl}/${supplierId}`
+      );
+    }
 
   addSupplier(payload: CreateSupplier){
     return this.http.post(`${this.baseUrl}/create-supplier`,payload)

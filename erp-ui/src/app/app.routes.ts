@@ -41,7 +41,7 @@ export const routes: Routes = [
 
             // Supplier Ledger Details Page
             {
-                path: 'supplier-ledger/:id',
+                path: 'app-supplier-ledger-details/:id',
                 component: SupplierLedgerDetailsComponent
             }
         ]

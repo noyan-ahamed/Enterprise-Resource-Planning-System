@@ -6,11 +6,13 @@ import { PurchaseOrderComponent } from './components/purchase/purchase-order.com
 import { Products } from './components/products/products';
 import { SupplierLedgerComponent } from './components/supplier-ledger/supplier-ledger.component/supplier-ledger.component';
 import { SupplierLedgerDetailsComponent } from './components/supplier-ledger/supplier-ledger-details.component/supplier-ledger-details.component';
+import { EmployeeLayout } from './layouts/employee-layout/employee-layout';
+import { CustomerComponent } from './components/customer/customer.component/customer.component';
 
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: "admin-layout",
+        redirectTo: "employee-layout",
         pathMatch: "full"
     },
     {
@@ -43,7 +45,15 @@ export const routes: Routes = [
             {
                 path: 'app-supplier-ledger-details/:id',
                 component: SupplierLedgerDetailsComponent
+            },
+            {
+                path: 'customer.component',
+                component: CustomerComponent
             }
         ]
+    },
+    {
+        path: 'employee-layout',
+        component: EmployeeLayout
     }
 ];

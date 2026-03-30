@@ -1,0 +1,157 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side" opened class="custom-sidenav">
+
+    <div class="logo text-center py-3 fw-bold">
+      Employee
+    </div>
+
+    <!-- ADMIN MENU -->
+    <mat-nav-list>
+
+      <!-- Dashboard -->
+      <a mat-list-item routerLink="admin_dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        <span class="ms-2">Dashboard</span>
+      </a>
+
+      <!-- Sales Management -->
+      <mat-expansion-panel [expanded]="activeMenu === 'sales'" (opened)="setActive('sales')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>point_of_sale</mat-icon>
+            <span class="ms-2">Sales</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <a mat-list-item routerLink="new-sale" routerLinkActive="active">
+          <mat-icon>receipt_long</mat-icon>
+          <span class="ms-2">New Sale Entry</span>
+        </a>
+
+        <a mat-list-item routerLink="sales-history" routerLinkActive="active">
+          <mat-icon>history</mat-icon>
+          <span class="ms-2">Sales History</span>
+        </a>
+
+        <a mat-list-item routerLink="payment-collection" routerLinkActive="active">
+          <mat-icon>payments</mat-icon>
+          <span class="ms-2">Submit Payment / Collection</span>
+        </a>
+      </mat-expansion-panel>
+
+      <!-- Attendance & Leave -->
+      <mat-expansion-panel [expanded]="activeMenu === 'attendance'" (opened)="setActive('attendance')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>event_note</mat-icon>
+            <span class="ms-2">Attendance & Leave</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <a mat-list-item routerLink="my-attendance" routerLinkActive="active">
+          <mat-icon>fact_check</mat-icon>
+          <span class="ms-2">My Attendance</span>
+        </a>
+
+        <a mat-list-item routerLink="leave-request" routerLinkActive="active">
+          <mat-icon>event_available</mat-icon>
+          <span class="ms-2">Submit Leave Request</span>
+        </a>
+
+        <a mat-list-item routerLink="leave-history" routerLinkActive="active">
+          <mat-icon>history</mat-icon>
+          <span class="ms-2">Leave History</span>
+        </a>
+      </mat-expansion-panel>
+
+      <!-- Payroll / Personal Info -->
+      <mat-expansion-panel [expanded]="activeMenu === 'payroll'" (opened)="setActive('payroll')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>payments</mat-icon>
+            <span class="ms-2">Payroll & Info</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <a mat-list-item routerLink="my-payroll" routerLinkActive="active">
+          <mat-icon>account_balance_wallet</mat-icon>
+          <span class="ms-2">My Payroll</span>
+        </a>
+      </mat-expansion-panel>
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- MAIN CONTENT -->
+  <mat-sidenav-content>
+
+    <!-- TOP BAR -->
+    <mat-toolbar class="topbar shadow-sm">
+      <div class="d-flex align-items-center w-100">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <span class="ms-2 fw-bold text-primary">
+          NoyonTrade ERP
+          <small class="text-muted fw-light">BD</small>
+        </span>
+
+        <span class="spacer"></span>
+
+        <div class="search-bar d-none d-md-block me-3">
+          <input type="text" class="form-control form-control-sm" placeholder="Search Product / Supplier / Customer...">
+        </div>
+
+        <!-- PROFILE MENU -->
+        <!-- <button 
+          mat-icon-button 
+          [matMenuTriggerFor]="profileMenu"
+          aria-label="Admin profile menu"
+          class="profile-btn"
+        >
+
+          @if (userPhotoUrl) {
+            <img 
+              [src]="userPhotoUrl" 
+              alt="Admin photo" 
+              class="rounded-circle avatar-img" 
+              width="32" 
+              height="32"
+            />
+          } @else {
+            <div 
+              class="avatar-initials rounded-circle d-flex align-items-center justify-content-center"
+              [style.backgroundColor]="avatarBgColor"
+            >
+              {{ userInitials }}
+            </div>
+          }
+
+          <mat-icon class="ms-1">arrow_drop_down</mat-icon>
+        </button> -->
+
+        <mat-menu #profileMenu="matMenu" xPosition="before">
+          <button mat-menu-item (click)="onProfile()" routerLink="profile.component">
+            <mat-icon>account_circle</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item (click)="onSettings()">
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()" class="text-danger">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+
+    <div class="container-fluid mt-3">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

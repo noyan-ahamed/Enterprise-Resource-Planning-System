@@ -21,20 +21,10 @@ public class Customer {
     @Column(name = "company_name")
     private String companyName;
 
-    @Column(name = "contact_person")
-    private String contactPerson;
-
     @Column(nullable = false, unique = true)
     private String mobileNumber;
 
-    @Column(name = "tin_number")
-    private String tinNumber;
-
     private String address;
-
-    @Column(name = "payment_terms")
-    private String paymentTerms;
-    
 
     @Column(name = "created_at")
     private LocalDate createdAt;

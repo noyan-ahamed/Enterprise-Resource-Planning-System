@@ -1,0 +1,100 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.custom-sidenav {
+  width: 270px;
+  // background: linear-gradient(180deg,  #36406e, #8aaed3);
+
+  // background: linear-gradient(180deg, #1e3a8a, #3b82f6);
+
+  // background: linear-gradient(180deg, #312e81, #6366f1);
+  // background: linear-gradient(180deg, #0f172a, #1e293b);
+  // background: linear-gradient(180deg, #1e1b4b, #312e81);
+  // background: linear-gradient(180deg, #111827, #374151);
+  // background: #1f2933;
+  // background: linear-gradient(135deg, #0c1426, #1b2a4a);
+  // background: linear-gradient(135deg, #1a1f36, #2d3a66);
+  // background: linear-gradient(135deg, #0f172a, #020617);
+  background: linear-gradient(135deg, #2b2f77, #1f1b4b);
+
+backdrop-filter: blur(10px);
+
+
+
+
+
+
+
+
+  // background: linear-gradient(180deg, #0f172a, #334155);
+
+  // background: linear-gradient(180deg, #0e7490, #06b6d4);
+
+  // background: linear-gradient(180deg, #111827, #374151);
+  // border-radius: 0 !important;
+  // background: #4a5669; // dark blue-gray
+  color: #ffffff;
+}
+
+.custom-sidenav mat-icon,
+.custom-sidenav span {
+  color: #ffffff;
+}
+
+.brand {
+  padding: 16px;
+
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+mat-expansion-panel {
+  background: transparent;
+  color: #fff;
+  font-size: 10px;
+}
+
+mat-expansion-panel-header {
+  // font-weight: 500;
+  color: white;
+}
+
+a.mat-list-item {
+  color: #e9ecef;
+  padding-left: 32px;
+}
+
+a.mat-list-item.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+}
+
+
+
+// .topbar {
+//   position: sticky;
+//   color: #1e293b;
+//   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+// }
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    height: 64px;
+    
+    .spacer { flex: 1 1 auto; }
+    .search-bar input { width: 300px; background: #f8f9fa; border: none; }
+  }
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+// mat-toolbar{
+//    position: sticky;
+// }

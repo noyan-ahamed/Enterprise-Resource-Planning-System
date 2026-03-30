@@ -51,10 +51,7 @@ public class CustomerServiceImplement implements CustomerService {
     private void mapDtoToEntity(CustomerDTO dto, Customer customer) {
         customer.setName(dto.getName());
         customer.setCompanyName(dto.getCompanyName());
-        customer.setContactPerson(dto.getContactPerson());
         customer.setMobileNumber(dto.getMobileNumber());
-        customer.setTinNumber(dto.getTinNumber());
         customer.setAddress(dto.getAddress());
-        customer.setPaymentTerms(dto.getPaymentTerms());
     }
 }

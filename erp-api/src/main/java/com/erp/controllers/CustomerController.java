@@ -1,6 +1,7 @@
 package com.erp.controllers;
 
 import com.erp.dto.CustomerDTO;
+import com.erp.dto.QuickCustomerCreateRequestDTO;
 import com.erp.enities.Customer;
 import com.erp.services.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,13 @@ public class CustomerController {
     @PostMapping("/create-customer")
     public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDTO dto) {
         return ResponseEntity.ok(customerService.createCustomer(dto));
+    }
+
+
+    //new
+    @PostMapping("/quick-create")
+    public Customer quickCreate(@RequestBody QuickCustomerCreateRequestDTO request) {
+       return customerService.quickCreate(request);
     }
 
     @PutMapping("/update-customer/{id}")

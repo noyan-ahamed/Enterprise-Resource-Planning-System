@@ -9,5 +9,8 @@ import java.util.List;
 
 public interface PartyLedgerEntryRepository extends JpaRepository<PartyLedgerEntry,Long> {
     List<PartyLedgerEntry> findByPartyTypeAndPartyIdOrderByEntryDateAscIdAsc(PartyType partyType, Long partyId);
+
+    //new
+    List<PartyLedgerEntry> findByPartyTypeAndPartyId(PartyType partyType, Long partyId, Sort sort);
 }
 

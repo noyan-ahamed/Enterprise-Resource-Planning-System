@@ -1,8 +1,6 @@
 package com.erp.services.implemented;
 
-import com.erp.enities.PartyLedgerEntry;
-import com.erp.enities.PurchaseOrderHeader;
-import com.erp.enities.SupplierPayment;
+import com.erp.enities.*;
 import com.erp.enums.LedgerTransactionType;
 import com.erp.enums.PartyType;
 import com.erp.repositories.PartyLedgerEntryRepository;
@@ -35,6 +33,7 @@ public class LedgerServiceImplement implements LedgerService {
         entry.setRemarks("Purchase received - " + order.getInvoiceNumber());
 
         ledgerRepo.save(entry);
+
     }
 
     @Override
@@ -51,10 +50,44 @@ public class LedgerServiceImplement implements LedgerService {
         entry.setRemarks("Supplier payment - " + payment.getVoucherNo());
 
         ledgerRepo.save(entry);
+
     }
 
     @Override
     public List<PartyLedgerEntry> getAllLedger() {
         return ledgerRepo.findAll(Sort.by(Sort.Direction.ASC,"id"));
     }
+
+//new
+
+    @Override
+    public void createCustomerSaleEntry(SalesOrderHeader salesOrder) {
+        PartyLedgerEntry entry = new PartyLedgerEntry();
+        entry.setEntryDate(salesOrder.getSalesDate());
+        entry.setPartyType(PartyType.CUSTOMER);
+        entry.setPartyId(salesOrder.getCustomer().getId());
+        entry.setTransactionType(LedgerTransactionType.SALE);
+        entry.setReferenceType("SALES_ORDER");
+        entry.setReferenceId(salesOrder.getId());
+        entry.setDebitAmount(BigDecimal.ZERO);
+        entry.setCreditAmount(salesOrder.getNetTotal());
+        entry.setRemarks("Sale invoice - " + salesOrder.getInvoiceNumber());
+        ledgerRepo.save(entry);
+    }
+
+    @Override
+    public void createCustomerPaymentEntry(CustomerPayment payment) {
+        PartyLedgerEntry entry = new PartyLedgerEntry();
+        entry.setEntryDate(payment.getPaymentDate());
+        entry.setPartyType(PartyType.CUSTOMER);
+        entry.setPartyId(payment.getCustomer().getId());
+        entry.setTransactionType(LedgerTransactionType.PAYMENT);
+        entry.setReferenceType("CUSTOMER_PAYMENT");
+        entry.setReferenceId(payment.getId());
+        entry.setDebitAmount(payment.getAmount());
+        entry.setCreditAmount(BigDecimal.ZERO);
+        entry.setRemarks("Customer payment - " + payment.getVoucherNo());
+        ledgerRepo.save(entry);
+    }
+
 }

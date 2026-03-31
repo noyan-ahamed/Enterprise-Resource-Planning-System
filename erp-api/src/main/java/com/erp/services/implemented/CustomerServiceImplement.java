@@ -1,6 +1,7 @@
 package com.erp.services.implemented;
 
 import com.erp.dto.CustomerDTO;
+import com.erp.dto.QuickCustomerCreateRequestDTO;
 import com.erp.enities.Customer;
 import com.erp.repositories.CustomerRepository;
 import com.erp.services.CustomerService;
@@ -46,6 +47,23 @@ public class CustomerServiceImplement implements CustomerService {
     @Override
     public Customer getCustomerById(Long id) {
         return customerRepo.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
+    }
+
+
+    //new employee can create customer
+    @Override
+    public Customer quickCreate(QuickCustomerCreateRequestDTO request) {
+        customerRepo.findByMobileNumber(request.getMobileNumber()).ifPresent(c -> {
+            throw new RuntimeException("Customer with this mobile already exists.");
+        });
+
+        Customer customer = new Customer();
+        customer.setName(request.getName());
+        customer.setCompanyName(request.getCompanyName());
+        customer.setMobileNumber(request.getMobileNumber());
+        customer.setAddress(request.getAddress());
+
+        return customerRepo.save(customer);
     }
 
     private void mapDtoToEntity(CustomerDTO dto, Customer customer) {

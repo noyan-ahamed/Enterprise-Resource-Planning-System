@@ -96,7 +96,8 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
                 Product product = item.getProduct();
 
                 // ১. স্টক আপডেট
-                ProductStock stock = stockRepo.findByProduct(product);
+                ProductStock stock = stockRepo.findByProduct(product)
+                        .orElseThrow(() -> new RuntimeException("Stock not found"));;
                 if (stock == null) {
                     stock = new ProductStock();
                     stock.setProduct(product);

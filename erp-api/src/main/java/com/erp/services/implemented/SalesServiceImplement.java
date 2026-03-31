@@ -75,10 +75,11 @@ public class SalesServiceImplement implements SalesService {
                 throw new RuntimeException("Insufficient stock for product: " + product.getName());
             }
 
-            BigDecimal unitPrice = itemDTO.getUnitPrice() != null
-                    ? itemDTO.getUnitPrice()
-                    : product.getSellingPrice();
+            if (product.getSellingPrice() == null || product.getSellingPrice().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new RuntimeException("Selling price not set for product: " + product.getName());
+            }
 
+            BigDecimal unitPrice = product.getSellingPrice();
             BigDecimal lineTotal = unitPrice.multiply(BigDecimal.valueOf(itemDTO.getQuantity()));
 
             SalesOrderItem item = new SalesOrderItem();
@@ -97,6 +98,7 @@ public class SalesServiceImplement implements SalesService {
         }
 
         BigDecimal discount = request.getDiscountAmount() != null ? request.getDiscountAmount() : BigDecimal.ZERO;
+//        discountAmount = subTotal * percent / 100
         BigDecimal netTotal = subTotal.subtract(discount);
 
         if (netTotal.compareTo(BigDecimal.ZERO) < 0) {

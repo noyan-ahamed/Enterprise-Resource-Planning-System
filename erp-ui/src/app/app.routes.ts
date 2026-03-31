@@ -8,6 +8,8 @@ import { SupplierLedgerComponent } from './components/supplier-ledger/supplier-l
 import { SupplierLedgerDetailsComponent } from './components/supplier-ledger/supplier-ledger-details.component/supplier-ledger-details.component';
 import { EmployeeLayout } from './layouts/employee-layout/employee-layout';
 import { CustomerComponent } from './components/customer/customer.component/customer.component';
+import { NewSaleEntryComponent } from './components/employee-sales/new-sale-entry.component/new-sale-entry.component';
+import { SalesHistoryComponent } from './components/employee-sales/sales-history.component/sales-history.component';
 
 export const routes: Routes = [
     {
@@ -54,6 +56,16 @@ export const routes: Routes = [
     },
     {
         path: 'employee-layout',
-        component: EmployeeLayout
+        component: EmployeeLayout,
+        children: [
+            {
+                path: 'new-sale-entry',
+                component: NewSaleEntryComponent
+            },
+            {
+                path: 'sales-history',
+                component: SalesHistoryComponent
+            }
+        ]
     }
 ];

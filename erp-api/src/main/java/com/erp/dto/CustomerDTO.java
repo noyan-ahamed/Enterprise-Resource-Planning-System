@@ -8,6 +8,7 @@ import lombok.Setter;
 public class CustomerDTO {
     private String name;
     private String companyName;
+    private String email;
     private String mobileNumber;
     private String address;
     private Double creditLimit;

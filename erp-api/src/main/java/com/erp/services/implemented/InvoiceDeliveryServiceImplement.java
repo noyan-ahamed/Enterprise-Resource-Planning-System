@@ -27,6 +27,10 @@ public class InvoiceDeliveryServiceImplement implements InvoiceDeliveryService {
 
     @Override
     public void notifySellerPaymentApproved(CustomerPayment payment) {
-        log.info("Notify seller placeholder for approved payment: {}", payment.getVoucherNo());
+        // TODO:
+        // 1. seller / receiver employee notification
+        // 2. customer email / sms notification
+        // 3. payment approval mail template
+        log.info("Customer payment approved notification placeholder for voucher: {}", payment.getVoucherNo());
     }
 }

@@ -23,6 +23,7 @@ export interface CustomerPaymentCreateRequest {
   remarks?: string;
 }
 
+
 export interface CustomerPaymentResponse {
   id: number;
   voucherNo: string;
@@ -36,6 +37,10 @@ export interface CustomerPaymentResponse {
   receivedByEmployeeId?: number;
   receivedByEmployeeName?: string;
   salesOrderId?: number | null;
+
+
+  customerMobile: string;
+  salesInvoiceNumber?: string | null;
 }
 
 export interface CustomerPaymentHistoryRow {
@@ -46,4 +51,9 @@ export interface CustomerPaymentHistoryRow {
   paymentMethod: string;
   remarks?: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED' | string;
+}
+
+
+export interface CustomerPaymentApprovalRequest {
+  approvedByUserId?: number | null;
 }

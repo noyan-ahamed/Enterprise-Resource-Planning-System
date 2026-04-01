@@ -1,0 +1,259 @@
+<div class="container-fluid py-3">
+  <div class="row g-3">
+
+    <div class="col-12">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body">
+
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+            <div>
+              <h4 class="mb-1">
+                <i class="fa-solid fa-user-check me-2 text-primary"></i>
+                Approval Center
+              </h4>
+              <p class="text-muted mb-0">Admin approval for customer payments and payroll</p>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+              <button
+                type="button"
+                class="btn rounded-pill px-4"
+                [class.btn-primary]="activeModule() === 'CUSTOMER_PAYMENT'"
+                [class.btn-outline-primary]="activeModule() !== 'CUSTOMER_PAYMENT'"
+                (click)="setActiveModule('CUSTOMER_PAYMENT')">
+                <i class="fa-solid fa-money-bill-transfer me-2"></i>
+                Customer Payment Approval
+              </button>
+
+              <button
+                type="button"
+                class="btn rounded-pill px-4"
+                [class.btn-dark]="activeModule() === 'PAYROLL'"
+                [class.btn-outline-dark]="activeModule() !== 'PAYROLL'"
+                (click)="setActiveModule('PAYROLL')">
+                <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                Payroll Approval
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================
+         CUSTOMER PAYMENT APPROVAL
+         ========================= -->
+    @if (activeModule() === 'CUSTOMER_PAYMENT') {
+
+      <!-- Summary Cards -->
+      <div class="col-12">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+              <div class="card-body">
+                <div class="small text-muted">Total Records</div>
+                <h3 class="fw-bold mb-0">{{ totalCount() }}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+              <div class="card-body">
+                <div class="small text-muted">Pending</div>
+                <h3 class="fw-bold text-warning mb-0">{{ totalPending() }}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+              <div class="card-body">
+                <div class="small text-muted">Approved</div>
+                <h3 class="fw-bold text-success mb-0">{{ totalApproved() }}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+              <div class="card-body">
+                <div class="small text-muted">Pending Amount</div>
+                <h3 class="fw-bold text-primary mb-0">{{ totalPendingAmount() | number:'1.2-2' }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter / Search -->
+      <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="card-body">
+            <div class="row g-3 align-items-end">
+              <div class="col-lg-6">
+                <label class="form-label fw-semibold">Search Payment</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search by voucher / mobile / customer name and press Enter"
+                  [ngModel]="searchKeyword()"
+                  (ngModelChange)="searchKeyword.set($event)"
+                  (keydown)="searchOnEnter($event)">
+              </div>
+
+              <div class="col-lg-3">
+                <label class="form-label fw-semibold">Status Filter</label>
+                <select
+                  class="form-select"
+                  [ngModel]="selectedStatus()"
+                  (ngModelChange)="onStatusChange($event)">
+                  <option value="ALL">All</option>
+                  <option value="PENDING_APPROVAL">Pending Approval</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+              </div>
+
+              <div class="col-lg-3 d-flex gap-2">
+                <button class="btn btn-primary w-100" type="button" (click)="loadCustomerPayments()">
+                  <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+                </button>
+
+                <button class="btn btn-outline-secondary w-100" type="button" (click)="clearFilters()">
+                  <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Table -->
+      <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="mb-0">
+                <i class="fa-solid fa-list-check me-2 text-primary"></i>
+                Customer Payment List
+              </h5>
+
+              @if (loading()) {
+                <span class="badge bg-info-subtle text-dark border">
+                  <i class="fa-solid fa-spinner fa-spin me-1"></i>
+                  Loading...
+                </span>
+              }
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>#</th>
+                    <th>Voucher</th>
+                    <th>Customer</th>
+                    <th>Mobile</th>
+                    <th>Sales Invoice</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @if (customerPayments().length > 0) {
+                    @for (payment of customerPayments(); track payment.id; let i = $index) {
+                      <tr>
+                        <td>{{ i + 1 }}</td>
+                        <td class="fw-semibold">{{ payment.voucherNo }}</td>
+                        <td>{{ payment.customerName }}</td>
+                        <td>{{ payment.customerMobile }}</td>
+                        <td>{{ payment.salesInvoiceNumber || '-' }}</td>
+                        <td class="fw-semibold">{{ payment.amount | number:'1.2-2' }}</td>
+                        <td>{{ payment.paymentDate }}</td>
+                        <td>{{ payment.paymentMethod }}</td>
+                        <td>
+                          <span class="badge rounded-pill px-3 py-2" [class]="statusBadgeClass(payment.status)">
+                            {{ payment.status }}
+                          </span>
+                        </td>
+                        <td>{{ payment.remarks || '-' }}</td>
+
+                        <td class="text-center">
+                          <div class="d-flex justify-content-center gap-2">
+                            <button
+                              type="button"
+                              class="btn btn-sm btn-success rounded-pill"
+                              [disabled]="!canTakeAction(payment.status) || isRowActionLoading(payment.id)"
+                              (click)="approvePayment(payment)">
+                              @if (isRowActionLoading(payment.id)) {
+                                <i class="fa-solid fa-spinner fa-spin me-1"></i>
+                              } @else {
+                                <i class="fa-solid fa-check me-1"></i>
+                              }
+                              Approve
+                            </button>
+
+                            <button
+                              type="button"
+                              class="btn btn-sm btn-danger rounded-pill"
+                              [disabled]="!canTakeAction(payment.status) || isRowActionLoading(payment.id)"
+                              (click)="rejectPayment(payment)">
+                              @if (isRowActionLoading(payment.id)) {
+                                <i class="fa-solid fa-spinner fa-spin me-1"></i>
+                              } @else {
+                                <i class="fa-solid fa-xmark me-1"></i>
+                              }
+                              Reject
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    }
+                  } @else {
+                    <tr>
+                      <td colspan="11" class="text-center py-5 text-muted">
+                        <i class="fa-solid fa-circle-info me-2"></i>
+                        No payment records found
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- =========================
+         PAYROLL PLACEHOLDER
+         ========================= -->
+    @if (activeModule() === 'PAYROLL') {
+      <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="card-body text-center py-5">
+            <i class="fa-solid fa-file-invoice-dollar fs-1 text-secondary mb-3"></i>
+            <h4 class="mb-2">Payroll Approval</h4>
+            <p class="text-muted mb-3">
+              HR generated payroll approval section will be added here.
+            </p>
+
+            <div class="alert alert-warning rounded-4 text-start mb-0">
+              <strong>TODO:</strong>
+              Payroll approval API and list binding will be connected later.
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

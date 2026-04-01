@@ -77,6 +77,15 @@ public class LedgerServiceImplement implements LedgerService {
 
     @Override
     public void createCustomerPaymentEntry(CustomerPayment payment) {
+
+        boolean alreadyExists = ledgerRepo
+                .findByReferenceTypeAndReferenceId("CUSTOMER_PAYMENT", payment.getId())
+                .isPresent();
+
+        if (alreadyExists) {
+            return; // duplicate ledger block
+        }
+
         PartyLedgerEntry entry = new PartyLedgerEntry();
         entry.setEntryDate(payment.getPaymentDate());
         entry.setPartyType(PartyType.CUSTOMER);
@@ -87,7 +96,9 @@ public class LedgerServiceImplement implements LedgerService {
         entry.setDebitAmount(payment.getAmount());
         entry.setCreditAmount(BigDecimal.ZERO);
         entry.setRemarks("Customer payment - " + payment.getVoucherNo());
+
         ledgerRepo.save(entry);
     }
+
 
 }

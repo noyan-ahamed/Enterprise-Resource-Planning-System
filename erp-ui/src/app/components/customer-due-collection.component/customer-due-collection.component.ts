@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CustomerPaymentService } from '../../services/customer-payment.service';
-import { CustomerDueSummary, CustomerPaymentCreateRequest, CustomerPaymentResponse } from '../../models/customer-due-collection.model';
-
-
+import {
+  CustomerDueSummary,
+  CustomerPaymentCreateRequest,
+  CustomerPaymentResponse
+} from '../../models/customer-due-collection.model';
 
 @Component({
   selector: 'app-customer-due-collection',
@@ -13,7 +15,7 @@ import { CustomerDueSummary, CustomerPaymentCreateRequest, CustomerPaymentRespon
   templateUrl: './customer-due-collection.component.html',
   styleUrl: './customer-due-collection.component.scss',
 })
-export class CustomerDueCollectionComponent implements OnInit {
+export class CustomerDueCollectionComponent {
 
   private customerPaymentService = inject(CustomerPaymentService);
 
@@ -28,7 +30,7 @@ export class CustomerDueCollectionComponent implements OnInit {
   paymentForm = signal({
     customerId: 0,
     salesOrderId: null as number | null,
-    receivedByEmployeeId: 2, // later login user থেকে আসবে
+    receivedByEmployeeId: 2, // later login user থেকে auto আসবে
     amount: 0,
     paymentDate: this.todayDate(),
     paymentMethod: 'CASH',
@@ -38,10 +40,16 @@ export class CustomerDueCollectionComponent implements OnInit {
   paymentHistory = signal<CustomerPaymentResponse[]>([]);
 
   totalPendingPayments = computed(() =>
-    this.paymentHistory().filter(p => p.status === 'PENDING').reduce((sum, p) => sum + Number(p.amount || 0), 0)
+    this.paymentHistory()
+      .filter(p => p.status === 'PENDING_APPROVAL')
+      .reduce((sum, p) => sum + Number(p.amount || 0), 0)
   );
 
-  ngOnInit(): void {}
+  totalApprovedPayments = computed(() =>
+    this.paymentHistory()
+      .filter(p => p.status === 'APPROVED')
+      .reduce((sum, p) => sum + Number(p.amount || 0), 0)
+  );
 
   todayDate(): string {
     return new Date().toISOString().split('T')[0];
@@ -177,12 +185,7 @@ export class CustomerDueCollectionComponent implements OnInit {
           confirmButtonText: 'OK'
         });
 
-        if (customer) {
-          this.loadCustomerPaymentHistory(customer.customerId);
-
-          // UI side temporary update: due immediately কমাবো না
-          // কারণ approval এর আগে actual due finalized হবে না
-        }
+        this.loadCustomerPaymentHistory(customer.customerId);
 
         this.paymentForm.update(form => ({
           ...form,
@@ -205,8 +208,10 @@ export class CustomerDueCollectionComponent implements OnInit {
         return 'bg-success';
       case 'REJECTED':
         return 'bg-danger';
-      default:
+      case 'PENDING_APPROVAL':
         return 'bg-warning text-dark';
+      default:
+        return 'bg-secondary';
     }
   }
 }

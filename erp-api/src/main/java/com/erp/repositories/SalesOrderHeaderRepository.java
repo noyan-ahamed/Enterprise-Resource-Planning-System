@@ -12,4 +12,5 @@ public interface SalesOrderHeaderRepository extends JpaRepository<SalesOrderHead
     Optional<SalesOrderHeader> findByInvoiceNumber(String invoiceNumber);
     List<SalesOrderHeader> findByCustomer(Customer customer);
     List<SalesOrderHeader> findBySellerEmployee(Employee employee);
+    Optional<SalesOrderHeader> findTopByCustomerOrderBySalesDateDescIdDesc(Customer customer);
 }

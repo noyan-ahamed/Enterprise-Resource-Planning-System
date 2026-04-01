@@ -13,6 +13,7 @@ import { SalesHistoryComponent } from './components/employee-sales/sales-history
 import { CustomerLedgerComponent } from './components/customer-ledger/customer-ledger.component/customer-ledger.component';
 import { CustomerLedgerDetailsComponent } from './components/customer-ledger/customer-ledger-details.component/customer-ledger-details.component';
 import { CustomerDueCollectionComponent } from './components/customer-due-collection.component/customer-due-collection.component';
+import { ApprovedPaymentComponent } from './components/approved-payment.component/approved-payment.component';
 
 export const routes: Routes = [
     {
@@ -66,6 +67,10 @@ export const routes: Routes = [
                 path: 'app-customer-ledger-details/:id',
                 component: CustomerLedgerDetailsComponent
             },
+            {
+                path: 'approved-payment',
+                component: ApprovedPaymentComponent
+            }
         ]
     },
     {

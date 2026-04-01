@@ -1,5 +1,6 @@
 package com.erp.services;
 
+import com.erp.dto.CustomerDueSummaryDTO;
 import com.erp.dto.CustomerPaymentApprovalRequestDTO;
 import com.erp.dto.CustomerPaymentRequestDTO;
 import com.erp.dto.CustomerPaymentResponseDTO;
@@ -12,4 +13,10 @@ public interface CustomerPaymentService {
     CustomerPaymentResponseDTO rejectPayment(Long paymentId, CustomerPaymentApprovalRequestDTO request);
     List<CustomerPaymentResponseDTO> getPaymentsByCustomer(Long customerId);
     List<CustomerPaymentResponseDTO> getPendingPayments();
+
+
+    CustomerDueSummaryDTO searchCustomerDueSummary(String keyword);
+
+    // NEW
+    List<CustomerPaymentResponseDTO> getAdminPaymentList(String keyword, String status);
 }

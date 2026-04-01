@@ -37,6 +37,7 @@
               <div class="row">
                 <div class="col-md-4"><strong>Name:</strong> {{ selectedCustomer()?.name }}</div>
                 <div class="col-md-4"><strong>Mobile:</strong> {{ selectedCustomer()?.mobileNumber }}</div>
+                <div class="col-md-4"><strong>Email:</strong> {{ selectedCustomer()?.email }}</div>
                 <div class="col-md-4"><strong>Company:</strong> {{ selectedCustomer()?.companyName || '-' }}</div>
               </div>
               <div class="mt-1"><strong>Address:</strong> {{ selectedCustomer()?.address || '-' }}</div>
@@ -66,6 +67,15 @@
                       class="form-control"
                       [ngModel]="customerForm().mobileNumber"
                       (ngModelChange)="updateCustomerForm('mobileNumber', $event)">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Email *</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [ngModel]="customerForm().email"
+                      (ngModelChange)="updateCustomerForm('email', $event)">
                   </div>
 
                   <div class="col-md-6">

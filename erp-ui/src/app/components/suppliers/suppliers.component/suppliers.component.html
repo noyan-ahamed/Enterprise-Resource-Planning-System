@@ -75,6 +75,7 @@
             <th>#</th>
             <th>Supplier Info</th>
             <th>Contact</th>
+            <th>Address</th>
             <th>TIN / Terms</th>
             <th>Status</th>
             <th>Rating</th>
@@ -109,12 +110,18 @@
                 {{ s.mobileNumber }}
               </div>
 
-              @if (s.address) {
+              @if (s.email) {
                 <div class="small text-muted">
-                  <i class="fas fa-map-marker-alt me-1"></i>
-                  {{ s.address }}
+                  <i class="fas fa-envelope me-1"></i>
+                  {{ s.email }}
                 </div>
               }
+            </td>
+            <td>
+              <div class="small">
+                <i class="fas fa-map-marker-alt me-1"></i>
+                {{ s.address }}
+              </div>
             </td>
 
             <!-- TIN & Terms -->

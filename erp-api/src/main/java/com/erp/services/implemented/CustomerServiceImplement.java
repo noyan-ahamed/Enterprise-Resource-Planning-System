@@ -59,6 +59,7 @@ public class CustomerServiceImplement implements CustomerService {
 
         Customer customer = new Customer();
         customer.setName(request.getName());
+        customer.setEmail(request.getEmail());
         customer.setCompanyName(request.getCompanyName());
         customer.setMobileNumber(request.getMobileNumber());
         customer.setAddress(request.getAddress());
@@ -68,6 +69,7 @@ public class CustomerServiceImplement implements CustomerService {
 
     private void mapDtoToEntity(CustomerDTO dto, Customer customer) {
         customer.setName(dto.getName());
+        customer.setEmail(dto.getEmail());
         customer.setCompanyName(dto.getCompanyName());
         customer.setMobileNumber(dto.getMobileNumber());
         customer.setAddress(dto.getAddress());

@@ -1,6 +1,7 @@
 export interface CustomerSearchResponse {
   id: number;
   name: string;
+  email: string;
   companyName?: string;
   mobileNumber: string;
   address?: string;
@@ -8,6 +9,7 @@ export interface CustomerSearchResponse {
 
 export interface QuickCustomerCreateRequest {
   name: string;
+  email:string;
   companyName?: string;
   mobileNumber: string;
   address?: string;

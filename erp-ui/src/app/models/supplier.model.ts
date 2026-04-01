@@ -5,6 +5,7 @@ export interface Supplier {
   mobileNumber: string;             // entity এর mobileNumber
   tinNumber?: string;               // entity এর tinNumber
   address?: string;                 // entity এর address
+  email?:string;
   paymentTerms?: string;            // entity এর paymentTerms
   status?: string;   // entity এর status
   rating?: string;                  // entity এর rating

@@ -32,6 +32,7 @@ export class NewSaleEntryComponent implements OnInit {
   customerForm = signal<QuickCustomerCreateRequest>({
     name: '',
     companyName: '',
+    email:'',
     mobileNumber: '',
     address: ''
   });
@@ -195,6 +196,7 @@ export class NewSaleEntryComponent implements OnInit {
               this.customerForm.set({
                 name: '',
                 companyName: '',
+                email:'',
                 mobileNumber: keyword,
                 address: ''
               });
@@ -228,6 +230,7 @@ export class NewSaleEntryComponent implements OnInit {
           id: res.id,
           name: res.name,
           companyName: res.companyName,
+          email: res.email,
           mobileNumber: res.mobileNumber,
           address: res.address
         };
@@ -334,6 +337,7 @@ export class NewSaleEntryComponent implements OnInit {
     this.customerForm.set({
       name: '',
       companyName: '',
+      email:'',
       mobileNumber: '',
       address: ''
     });

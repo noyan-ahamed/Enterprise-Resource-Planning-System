@@ -52,12 +52,14 @@ export class SupplierDialogComponent {
       ],
       tinNumber: [''],
       address: [''],
+      email:['',[Validators.required, Validators.email]],
       paymentTerms: [''],
       status: ['ACTIVE'],
       rating: [3],
       bankAccount: [''],
       bkashNo: ['']
     });
+    // email validator pattern Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
 
     // If edit mode → patch + add ID
     if (data) {
@@ -76,8 +78,9 @@ export class SupplierDialogComponent {
     if (this.isEdit) {
 
       const payload: Supplier = this.supplierForm.value;
-
       this.supplierService.updateSupplier(payload.id!, payload).subscribe({
+        
+        
         next: () => {
           Swal.fire('Updated', 'Supplier info updated successfully', 'success');
           this.dialogRef.close(true);
@@ -85,6 +88,7 @@ export class SupplierDialogComponent {
         error: () => {
           Swal.fire('Error', 'Update failed', 'error');
         }
+        
       });
 
     } else {

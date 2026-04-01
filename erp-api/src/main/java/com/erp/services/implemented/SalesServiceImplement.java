@@ -179,6 +179,7 @@ public class SalesServiceImplement implements SalesService {
                     CustomerSearchResponseDTO dto = new CustomerSearchResponseDTO();
                     dto.setId(customer.getId());
                     dto.setName(customer.getName());
+                    dto.setEmail(customer.getEmail());
                     dto.setCompanyName(customer.getCompanyName());
                     dto.setMobileNumber(customer.getMobileNumber());
                     dto.setAddress(customer.getAddress());

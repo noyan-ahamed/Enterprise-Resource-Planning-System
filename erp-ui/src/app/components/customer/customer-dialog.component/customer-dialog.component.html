@@ -32,6 +32,17 @@
                placeholder="017XXXXXXXX">
       </mat-form-field>
     </div>
+    <!-- Email-->
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Email</mat-label>
+        <input matInput name="email" 
+        [(ngModel)]="customer.email"
+        required
+        pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+        placeholder="example@gmail.com">
+      </mat-form-field>
+    </div>
 
     <!-- Address -->
     <div class="col-12">

@@ -48,6 +48,10 @@ public class SupplierServiceImplement implements SupplierService {
         supplier.setCompanyName(dto.getCompanyName());
         supplier.setTinNumber(dto.getTinNumber());
         supplier.setPaymentTerms(dto.getPaymentTerms());
+
+// ✅ FIX: email set kora hocche
+        supplier.setEmail(dto.getEmail());
+
         supplier.setRating(dto.getRating());
         supplier.setBankAccount(dto.getBankAccount());
         supplier.setBkashNo(dto.getBkashNo());

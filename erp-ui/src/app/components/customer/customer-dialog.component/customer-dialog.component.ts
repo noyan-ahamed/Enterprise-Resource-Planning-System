@@ -30,6 +30,7 @@ export class CustomerDialogComponent {
     id: 0,
     name: '',
     mobileNumber: '',
+    email: '',
     companyName: '',
     address: ''
   };

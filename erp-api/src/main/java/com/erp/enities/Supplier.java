@@ -2,10 +2,14 @@ package com.erp.enities;
 
 import com.erp.enums.SupplierStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +20,7 @@ public class Supplier {
     @Column(name = "company_name")
     private String companyName;
 
-    @Column(name = "emails", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
     @Column(nullable = false, unique = true)
     private String mobileNumber;
@@ -37,100 +41,4 @@ public class Supplier {
 
     //getters Setters
 
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getMobileNumber() {
-        return mobileNumber;
-    }
-
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
-    }
-
-    public String getTinNumber() {
-        return tinNumber;
-    }
-
-    public void setTinNumber(String tinNumber) {
-        this.tinNumber = tinNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPaymentTerms() {
-        return paymentTerms;
-    }
-
-    public void setPaymentTerms(String paymentTerms) {
-        this.paymentTerms = paymentTerms;
-    }
-
-    public SupplierStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(SupplierStatus status) {
-        this.status = status;
-    }
-
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
-    public String getBankAccount() {
-        return bankAccount;
-    }
-
-    public void setBankAccount(String bankAccount) {
-        this.bankAccount = bankAccount;
-    }
-
-    public String getBkashNo() {
-        return bkashNo;
-    }
-
-    public void setBkashNo(String bkashNo) {
-        this.bkashNo = bkashNo;
-    }
-
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
 }

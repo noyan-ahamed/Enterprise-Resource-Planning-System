@@ -81,8 +81,7 @@
             <th>#</th>
             <th>Customer Info</th>
             <th>Contact</th>
-            <!-- <th>Company Name</th> -->
-            <!-- <th>Address</th> -->
+            <th>Address</th>
             <th>Creation Date</th>
             <th class="text-end">Actions</th>
           </tr>
@@ -115,28 +114,21 @@
                 {{ c.mobileNumber }}
               </div>
 
-              @if (c.address) {
+              @if (c.email) {
                 <div class="small text-muted">
-                  <i class="fas fa-map-marker-alt me-1"></i>
-                  {{ c.address }}
+                  <i class="fas fa-envelope me-1"></i>
+                  {{ c.email }}
                 </div>
               }
             </td>
 
-            <!-- TIN & Terms -->
-            <!-- <td>
-              @if (s.tinNumber) {
-                <div class="small">
-                  <b>TIN:</b> {{ s.tinNumber }}
-                </div>
-              }
-
-              @if (s.paymentTerms) {
-                <div class="small text-muted">
-                  <b>Terms:</b> {{ s.paymentTerms }}
-                </div>
-              }
-            </td> -->
+            <!-- address -->
+             <td>
+              <div class="small">
+                <i class="fas fa-map-marker-alt me-1"></i>
+                {{ c.address }}
+              </div>
+            </td>
 
             <!-- Status -->
             <!-- <td>

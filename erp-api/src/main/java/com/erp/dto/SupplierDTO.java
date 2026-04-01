@@ -14,6 +14,7 @@ import java.time.LocalDate;
 public class SupplierDTO {
     private String name;
     private String companyName;
+    private String email;
     private String mobileNumber;
     private String tinNumber;
     private String address;

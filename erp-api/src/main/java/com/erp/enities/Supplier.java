@@ -15,6 +15,9 @@ public class Supplier {
     private String name;
     @Column(name = "company_name")
     private String companyName;
+
+    @Column(name = "emails", unique = true, nullable = false)
+    private String email;
     @Column(nullable = false, unique = true)
     private String mobileNumber;
     @Column(name = "tin_number")

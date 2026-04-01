@@ -5,7 +5,7 @@ export interface CustomerLedgerSummary {
   totalApprovedPayment: number;
   currentDue: number;
 
-  // optional - supplier table থেকে পরে merge করতে পারো
+  // optional - customer table থেকে পরে merge করতে পারো
   companyName?: string;
   mobileNumber?: string;
 }

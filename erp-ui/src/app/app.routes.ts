@@ -10,6 +10,9 @@ import { EmployeeLayout } from './layouts/employee-layout/employee-layout';
 import { CustomerComponent } from './components/customer/customer.component/customer.component';
 import { NewSaleEntryComponent } from './components/employee-sales/new-sale-entry.component/new-sale-entry.component';
 import { SalesHistoryComponent } from './components/employee-sales/sales-history.component/sales-history.component';
+import { CustomerLedgerComponent } from './components/customer-ledger/customer-ledger.component/customer-ledger.component';
+import { CustomerLedgerDetailsComponent } from './components/customer-ledger/customer-ledger-details.component/customer-ledger-details.component';
+import { CustomerDueCollectionComponent } from './components/customer-due-collection.component/customer-due-collection.component';
 
 export const routes: Routes = [
     {
@@ -51,7 +54,18 @@ export const routes: Routes = [
             {
                 path: 'customer.component',
                 component: CustomerComponent
-            }
+            },
+            // Customer Ledger Summary Page
+            {
+                path: 'customer-ledger',
+                component: CustomerLedgerComponent
+            },
+
+            // Customer Ledger Details Page
+            {
+                path: 'app-customer-ledger-details/:id',
+                component: CustomerLedgerDetailsComponent
+            },
         ]
     },
     {
@@ -65,6 +79,10 @@ export const routes: Routes = [
             {
                 path: 'sales-history',
                 component: SalesHistoryComponent
+            },
+            {
+                path: 'customer-due-collection',
+                component: CustomerDueCollectionComponent
             }
         ]
     }

@@ -1,0 +1,31 @@
+.summary-box {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid #eef2f7;
+}
+
+.summary-box small {
+  display: block;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.due-box {
+  background: #fff7ed;
+  border-color: #fed7aa;
+}
+
+.custom-table th,
+.custom-table td {
+  vertical-align: middle;
+  padding: 14px 12px;
+}
+
+.running-badge {
+  background: #e0f2fe;
+  color: #075985;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 999px;
+}

@@ -78,6 +78,7 @@ export class SuppliersComponent implements OnInit {
   openSupplierDialog(supplier?: Supplier): void {
 
     const dialogRef = this.dialog.open(SupplierDialogComponent, {
+      autoFocus: false,
       width: '700px',
       data: supplier ? { ...supplier } : undefined
     });

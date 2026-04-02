@@ -9,81 +9,17 @@ import { Supplier } from '../../../models/supplier.model';
 import { Product } from '../../../models/product';
 import { PurchaseOrder } from '../../../models/purchase-order';
 import { ProductSerivce } from '../../../services/product.service';
+import { MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatOption } from "@angular/material/select";
 
 @Component({
   selector: 'app-purchase-dialog.component',
   imports: [ReactiveFormsModule,
     CommonModule, MatDialogContent,
-    FormsModule, MatDialogActions],
+    FormsModule, MatDialogActions, MatFormField, MatOption, MatLabel],
   templateUrl: './purchase-dialog.component.html',
   styleUrl: './purchase-dialog.component.scss',
 })
-// export class PurchaseDialogComponent {
-
-//   private service = inject(PurchaseOrderService);
-//   private supplierService = inject(SuppliersService);
-//   dialogRef = inject(MatDialogRef<PurchaseDialogComponent>);
-
-//   suppliers = signal<any[]>([]);
-
-
-//   // get items() {
-//   //   return this.form.get('items') as FormArray;
-//   // }
-
-//   constructor() {
-//     this.loadSuppliers();
-//     this.addRow();
-//   }
-
-//   loadSuppliers() {
-//     this.supplierService.getSuppliers().subscribe(res => {
-//       this.suppliers.set(res);
-//     });
-//   }
-
-//   addRow() {
-//     this.items.push(
-//       this.fb.group({
-//         productId: [null, Validators.required],
-//         quantity: [1, Validators.required],
-//         price: [0, Validators.required]
-//       })
-//     );
-//   }
-
-//   removeRow(i: number) {
-//     this.items.removeAt(i);
-//   }
-
-//  submit() {
-
-//   if (this.form.invalid) return;
-
-//   const raw = this.form.getRawValue();
-
-//   const payload = {
-//     supplierId: raw.supplierId!, // 🔥 null remove
-//     paymentTerms: raw.paymentTerms ?? '',
-//     items: raw.items.map((i: any) => ({
-//       productId: i.productId!,
-//       quantity: i.quantity!,
-//       price: i.price!
-//     }))
-//   };
-
-//   this.service.create(payload).subscribe(() => {
-//     Swal.fire('Created', '', 'success');
-//     this.dialogRef.close(true);
-//   });
-// }
-
-
-//   // helper
-//   getItemControl(item: any, name: string) {
-//   return item.get(name);
-// }
-// }
 
 export class PurchaseDialogComponent implements OnInit{
   newPurchase: any= {
@@ -101,6 +37,11 @@ export class PurchaseDialogComponent implements OnInit{
   suppliers = signal<Supplier[]>([]); // Load from API
   products = signal< Product[]>([]);   // Load from API
 
+
+
+  supplierSearch: string = '';
+filteredSuppliers = signal<Supplier[]>([]);
+
   ngOnInit(): void {
     this.loadSupplier();
     this.loadProduct();
@@ -111,13 +52,39 @@ export class PurchaseDialogComponent implements OnInit{
       {
         next: (res)=>{
           this.suppliers.set(res);
+          // ✅ INIT FILTER LIST
+      this.filteredSuppliers.set(res);
         },
       error: () => {
         alert('Failed to load suppliers');
       }
+      
       }
     )
   }
+
+
+  filterSuppliers() {
+  const search = this.supplierSearch.toLowerCase();
+
+  const filtered = this.suppliers().filter(s =>
+    s.name.toLowerCase().includes(search) ||
+    s.mobileNumber.includes(search)
+  );
+
+  this.filteredSuppliers.set(filtered);
+}
+
+filterProducts(index: number) {
+
+  const search = this.newPurchase.items[index].search.toLowerCase();
+
+  const filtered = this.products().filter(p =>
+    p.name.toLowerCase().includes(search)
+  );
+
+  this.newPurchase.items[index].filteredProducts = filtered;
+}
 
   loadProduct(){
     this.productService.getProducts().subscribe(
@@ -130,7 +97,16 @@ export class PurchaseDialogComponent implements OnInit{
   }
 
   addItem() {
-    this.newPurchase.items.push({ productId: '', quantity: 1, unitPrice: 0, lineTotal: 0 });
+    this.newPurchase.items.push({ 
+      productId: '', 
+      quantity: 1, 
+      unitPrice: 0, 
+      lineTotal: 0 ,
+
+       // ✅ NEW
+    search: '',
+    filteredProducts: this.products()
+    });
   }
 
   removeItem(index: number) {
@@ -160,7 +136,7 @@ export class PurchaseDialogComponent implements OnInit{
   }
 
 
-onCancel(){
+onCancel() {
 
 }
 }

@@ -23,60 +23,8 @@ import { createCategory, ProductCategoryModel } from '../../models/product-categ
   styleUrl: './product-category.scss',
 })
 export class ProductCategory implements OnInit {
-  // ngOnInit(): void {
-  //   this.initForm();
-  // }
 
-  // categoryForm!: FormGroup;
-  // isEdit!: boolean;
-  // constructor(
-  //   private fb: FormBuilder,
-  //   private categoryService: ProdcutCategoryService
-  // ) {
-  // }
-
-  // // ✅ form initialize
-  // initForm() {
-  //   this.categoryForm = this.fb.group({
-  //     name: ['', Validators.required],
-  //     description: [''],
-  //     status: ['']
-  //   });
-  // }
-
-  // // ✅ submit method
-  // onSubmit() {
-  //   if (this.categoryForm.invalid) {
-  //     this.categoryForm.markAllAsTouched();
-  //     return;
-  //   }
-
-  
-
-  //   if (this.isEdit) {
-  //       const payload = this.categoryForm.value;
-  //     // update (future)
-  //     console.log('Update mode', payload);
-  //   } else {
-  //       const payload:createCategory = this.categoryForm.value;
-  //     this.categoryService.addCategory(payload).subscribe({
-  //       next: (res) => {
-  //         console.log('Category added:', res);
-  //         this.categoryForm.reset();
-  //       },
-  //       error: (err) => {
-  //         console.error('Error:', err);
-  //       }
-  //     });
-  //   }
-  // }
-
-
-
-
-
-
-
+   showForm: boolean = false;  // Control the visibility of the form
 
 
   categoryForm!: FormGroup;
@@ -126,7 +74,7 @@ export class ProductCategory implements OnInit {
     const payload = this.categoryForm.value;
 
     if (this.isEdit()) {
-
+    
       this.categoryService.updateCategory(this.selectedId()!, payload).subscribe({
         next: () => {
 
@@ -137,6 +85,8 @@ export class ProductCategory implements OnInit {
             timer: 1500,
             showConfirmButton: false
           });
+
+          
 
           this.loadCategory();
           this.resetForm();
@@ -159,6 +109,9 @@ export class ProductCategory implements OnInit {
             showConfirmButton: false
           });
 
+          // Form submit logic (e.g., send to API)
+      this.showForm = false; // Hide form after submission
+
           this.loadCategory();
           this.resetForm();
         },
@@ -180,6 +133,7 @@ export class ProductCategory implements OnInit {
       description: item.description,
       status: item.status
     });
+       this.showForm = true;  // Show the form when editing
   }
 
   // 🔥 DELETE (with confirmation)
@@ -223,6 +177,7 @@ export class ProductCategory implements OnInit {
     this.categoryForm.reset({ status: 'ACTIVE' });
     this.isEdit.set(false);
     this.selectedId.set(null);
+     this.showForm = false;  // Hide the form on reset
   }
 
 }

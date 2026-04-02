@@ -1,0 +1,89 @@
+// SCSS styling to improve the card and table look
+
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h5 {
+  font-weight: 700;
+  color: #333;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+table.mat-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+th.mat-header-cell {
+  background-color: #f8f9fa;
+  color: #333;
+  font-weight: 600;
+  padding: 12px 15px;
+}
+
+td.mat-cell {
+  padding: 12px 15px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.mat-badge {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
+.mat-badge.bg-warning {
+  background-color: #ffc107;
+  color: white;
+}
+
+.mat-badge.bg-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.mat-badge.bg-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.mat-badge.bg-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.mat-icon-button {
+  margin-right: 10px;
+}
+
+.mat-raised-button {
+  margin-top: 5px;
+}
+
+.btn-group .mat-icon-button {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.mat-button {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}

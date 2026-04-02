@@ -35,7 +35,6 @@ public class Product {
     @Column(name = "selling_price")
     private BigDecimal sellingPrice;
 
-    private String unit;
 
     @Formula("(SELECT ps.quantity FROM product_stocks ps WHERE ps.product_id = id)")
     private Long stock;

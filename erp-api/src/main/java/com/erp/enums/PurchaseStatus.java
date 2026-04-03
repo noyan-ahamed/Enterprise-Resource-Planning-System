@@ -4,5 +4,5 @@ public enum PurchaseStatus {
     PENDING,
     APPROVED,
     RECEIVED,
-    CANCELED
+    CANCELLED
 }

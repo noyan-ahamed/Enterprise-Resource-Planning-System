@@ -63,7 +63,7 @@
               <td>{{ supplier.totalPurchase | number:'1.2-2' }}</td>
               <td>{{ supplier.totalPayment | number:'1.2-2' }}</td>
               <td>
-                <span class="badge due-badge">
+                <span class="badge due-badge bg-danger-subtle text-danger px-3 py-2 rounded-pill">
                   {{ supplier.currentDue | number:'1.2-2' }}
                 </span>
               </td>
@@ -71,36 +71,18 @@
                 <div class="d-flex justify-content-center gap-2 flex-wrap">
                   <button class="btn btn-outline-primary btn-sm rounded-pill px-3"
                           (click)="viewLedger(supplier.supplierId)">
-                    <i class="fa-solid fa-eye me-1"></i>
-                    View
+                    <i class="fa-solid fa-eye me-1"></i> View
                   </button>
-
                   <button class="btn btn-success btn-sm rounded-pill px-3"
                           (click)="openPaymentModal(supplier)">
-                    <i class="fa-solid fa-money-bill-wave me-1"></i>
-                    Pay
+                    <i class="fa-solid fa-money-bill-wave me-1"></i> Pay
                   </button>
                 </div>
-              </td>
-            </tr>
-
-            <tr *ngIf="filteredSuppliers().length === 0">
-              <td colspan="7" class="text-center py-4 text-muted">
-                No supplier ledger data found.
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 </div>
-
-<app-supplier-payment-modal
-  [isOpen]="isPaymentModalOpen"
-  [supplierId]="selectedSupplierId"
-  [supplierName]="selectedSupplierName"
-  (closeModal)="closePaymentModal()"
-  (paymentSaved)="onPaymentSaved()">
-</app-supplier-payment-modal>

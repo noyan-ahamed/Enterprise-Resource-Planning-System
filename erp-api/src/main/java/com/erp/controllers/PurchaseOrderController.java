@@ -4,6 +4,7 @@ package com.erp.controllers;
 import com.erp.dto.PurchaseOrderHeaderDTO;
 import com.erp.enities.PurchaseOrderHeader;
 import com.erp.enums.PurchaseStatus;
+import com.erp.services.InvoiceDeliveryService;
 import com.erp.services.PurchaseOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 public class PurchaseOrderController {
 
     private final PurchaseOrderService purchaseService;
+    private final InvoiceDeliveryService invoiceDeliveryService;
 
     // Create Purchase Order
     @PostMapping
@@ -56,6 +58,21 @@ public class PurchaseOrderController {
     ) {
         purchaseService.delete(id);
         return ResponseEntity.ok("Purchase order deleted");
+    }
+
+
+    //for manually mailing
+    @PostMapping("/{id}/send-email")
+    public ResponseEntity<String> manualEmailSend(@PathVariable Long id) {
+        try {
+            PurchaseOrderHeader order = purchaseService.getById(id);
+            PurchaseStatus status = order.getStatus();
+            // সার্ভিস লেয়ারের মেইল মেথডটি কল করা
+            invoiceDeliveryService.sendPurchaseStatusEmail(order,status);
+            return ResponseEntity.ok("Email sent successfully to " + order.getSupplier().getName());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
     }
 
 }

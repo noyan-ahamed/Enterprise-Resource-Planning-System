@@ -9,7 +9,9 @@ import com.erp.repositories.ProductStockRepository;
 import com.erp.repositories.PurchaseOrderHeaderRepository;
 import com.erp.repositories.SupplierRepository;
 import com.erp.services.LedgerService;
+import com.erp.services.MailService;
 import com.erp.services.PurchaseOrderService;
+import com.erp.services.reportService.ReportService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -17,10 +19,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PurchaseOrderServiceImplement implements PurchaseOrderService {
@@ -34,6 +37,9 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
     private final ProductStockRepository stockRepo;
 
     private final LedgerService ledgerService;
+
+    private final ReportService reportService;
+    private final MailService mailService;
 
     @Override
     @Transactional
@@ -85,7 +91,7 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
         // RECEIVED ba CANCELED hoye gele ar status change kora jabe na
-        if(order.getStatus() == PurchaseStatus.RECEIVED || order.getStatus() == PurchaseStatus.CANCELED) {
+        if(order.getStatus() == PurchaseStatus.RECEIVED || order.getStatus() == PurchaseStatus.CANCELLED) {
             throw new RuntimeException("Order is already " + order.getStatus() + " and cannot be modified.");
         }
 
@@ -115,9 +121,30 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
                 productRepo.save(product);
             }
             ledgerService.createSupplierPurchaseEntry(order);
+
         }
-        // CANCELED hole ekhane extra kono loop cholbe na, sudhu save hobe.
-        return purchaseRepo.save(order);
+       return purchaseRepo.save(order);
+    }
+
+
+    // মেইল পাঠানোর কমন প্রাইভেট মেথড
+    @Override
+    public void sendPurchaseEmail(PurchaseOrderHeader order) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("ORDER_ID", BigDecimal.valueOf(order.getId()));
+
+        // ১. রিপোর্ট জেনারেট
+        byte[] pdf = reportService.generateReport("purchase_report", params);
+
+        // ২. সাপ্লায়ার মেইল গেট করা
+        String supplierEmail = order.getSupplier().getEmail(); // আপনার Supplier এন্টিটিতে ইমেইল ফিল্ড থাকতে হবে
+
+        if (supplierEmail != null && !supplierEmail.isEmpty()) {
+            String subject = "Purchase Order Confirmation - " + order.getInvoiceNumber();
+            String body = "Dear " + order.getSupplier().getName() + ",\n\nPlease find the attached purchase order invoice.";
+
+            mailService.sendEmailWithAttachment(supplierEmail, subject, body, pdf, "Invoice_" + order.getInvoiceNumber() + ".pdf");
+        }
     }
 
     @Override

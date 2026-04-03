@@ -43,7 +43,7 @@ export interface PurchaseOrder {
   id?: number;
   supplier: Supplier;
   invoiceNumber?: string;
-  status: 'PENDING' | 'APPROVED' | 'RECEIVED' | 'CANCELED';
+  status: 'PENDING' | 'APPROVED' | 'RECEIVED' | 'CANCELLED';
   paymentTerms: string;
   items: PurchaseItem[];
   totalAmount: number;

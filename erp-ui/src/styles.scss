@@ -37,6 +37,10 @@ body {
   
 }
 /* You can add global styles to this file, and also import other style files */
+/* SweetAlert always above everything */
+.swal-high-zindex {
+  z-index: 2000 !important;
+}
 
 
 

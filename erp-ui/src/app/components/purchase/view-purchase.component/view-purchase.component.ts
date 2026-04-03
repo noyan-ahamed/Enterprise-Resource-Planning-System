@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { PurchaseOrderService } from '../../../services/purchase-order.service';
 import { PurchaseOrder } from '../../../models/purchase-order';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
@@ -16,6 +16,10 @@ export class ViewPurchaseComponent implements OnInit {
   private data = inject(MAT_DIALOG_DATA);
   private service = inject(PurchaseOrderService);
 
+
+  // ✅ Inject MatDialogRef
+  private dialogRef = inject(MatDialogRef<ViewPurchaseComponent>);
+
   orders = signal<PurchaseOrder | null>(null);
 
   ngOnInit(): void {
@@ -24,16 +28,20 @@ export class ViewPurchaseComponent implements OnInit {
 
   load(id: any) {
     this.service.getById(id).subscribe(res => {
-      console.log('API Response:', res);
       this.orders.set(res);
     });
   }
 
-  printInvoice(){
-
+  printInvoice(id: any){
+    this.service.getReport(id).subscribe(
+      blob => {
+      const fileURL = URL.createObjectURL(blob);
+      window.open(fileURL);}
+    )
   }
 
-  closeModal(){
-
+  // ✅ Close modal properly
+  closeModal() {
+    this.dialogRef.close(); // Close dialog
   }
 }

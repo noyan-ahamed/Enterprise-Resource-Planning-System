@@ -1,9 +1,55 @@
-.custom-dialog-container .mat-dialog-container {
-  padding: 1rem;       /* কম padding */
-  border-radius: 8px;  /* সুন্দর rounded corner */
+.invoice-wrapper {
+  background-color: #f8f9fa;
+  font-family: 'Inter', sans-serif;
+
+  .brand-name {
+    letter-spacing: -1px;
+  }
+
+  .uppercase {
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  .badge {
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  .table {
+    thead th {
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      padding: 15px 10px;
+    }
+    tbody td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+  }
+
+  .card {
+    border-radius: 15px;
+    overflow: hidden;
+  }
 }
 
-.table-responsive {
-  max-height: 60vh;   /* table scrollable যদি height বেশি হয় */
-  overflow-y: auto;
+// Print Styles: প্রিন্ট করার সময় বাটন হাইড থাকবে
+@media print {
+  .btn, .card-footer {
+    display: none !important;
+  }
+  .card {
+    box-shadow: none !important;
+    border: none !important;
+  }
+  .invoice-wrapper {
+    background: white !important;
+    padding: 0 !important;
+  }
 }

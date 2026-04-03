@@ -87,3 +87,57 @@ td.mat-cell {
   background-color: #f0f0f0;
   border-radius: 5px;
 }
+
+
+
+// 🔹 Table compact
+table.mat-table {
+  width: 100%;
+  margin-top: 10px;
+  font-size: 0.85rem; // text choto
+}
+
+th, td {
+  padding: 6px 10px !important; // kom padding
+  vertical-align: middle;
+}
+
+// 🔹 Header
+th {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+// 🔹 Badge small
+.badge {
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+// 🔹 Action buttons (Approve, Receive etc.)
+.btn-group .btn {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  height: 26px;
+  line-height: 1;
+}
+
+// 🔹 Material buttons (View, Print)
+.mat-raised-button {
+  font-size: 0.7rem !important;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 8px;
+  margin-right: 4px;
+}
+
+// 🔹 Table code (invoice)
+code {
+  font-size: 0.75rem;
+}
+
+// 🔹 Card body spacing komano
+.card-body {
+  padding: 12px;
+}

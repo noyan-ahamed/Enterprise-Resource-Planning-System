@@ -1,13 +1,34 @@
 <div class="card shadow-sm m-4">
-  <div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <h5 class="mb-0">Purchase Orders</h5>
-    <button mat-raised-button color="primary" (click)="openDialog()">+ New Purchase</button>
+  <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
+   <h5 class="mb-0" style="font-size: 1.2rem;">Purchase Orders</h5>
+     <!-- Filter Dropdown -->
+    <div class="d-flex align-items-center gap-2">
+       <!-- Bootstrap Select -->
+     <select class="form-select" 
+        [(ngModel)]="filterRange" 
+        (change)="setFilter($any($event.target).value)">
+  <option value="TODAY">Today</option>
+  <option value="7DAYS">Last 7 Days</option>
+  <option value="15DAYS">Last 15 Days</option>
+  <option value="LASTMONTH">Last Month</option>
+  <option value="LAST2MONTHS">Last 2 Months</option>
+  <option value="ALL">All</option>
+</select>
+   
+  <!-- Button -->
+  <button mat-raised-button color="primary"
+          style="height: 38px; min-width: 140px; font-size: 0.85rem; white-space: nowrap; padding: 0 12px;"
+          (click)="openDialog()">
+    + New Purchase
+  </button>
+       </div>
   </div>
 
   <div class="card-body">
+   
     <!-- Table inside a mat-card -->
     <mat-card class="erp-card shadow-sm">
-      <table mat-table class="table table-hover">
+      <table mat-table class="table table-hover table-striped">
         <thead class="bg-light">
           <tr>
             <th>#</th>
@@ -21,7 +42,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let p of orders(); let i = index">
+          <tr  *ngFor="let p of filteredOrders(); let i = index">
             <td>{{i + 1}}</td>
             <td><code>{{p.invoiceNumber}}</code></td>
             <td>{{p.supplier?.name}}</td>
@@ -32,7 +53,7 @@
                 'bg-warning': p.status === 'PENDING',
                 'bg-info': p.status === 'APPROVED',
                 'bg-success': p.status === 'RECEIVED',
-                'bg-danger': p.status === 'CANCELED'
+                'bg-danger': p.status === 'CANCELLED'
               }">{{p.status}}</span>
             </td>
             <td class="text-center">
@@ -52,16 +73,16 @@
                   Receive
                 </button>
 
-                <!-- Cancel Button (Only enable if status is not 'RECEIVED' or 'CANCELED') -->
-                <button mat-button [disabled]="p.status === 'RECEIVED' || p.status === 'CANCELED'"
-                  (click)="updateStatus(p, 'CANCELED')" class="btn btn-danger">
+                <!-- Cancel Button (Only enable if status is not 'RECEIVED' or 'CANCELLED') -->
+                <button mat-button [disabled]="p.status === 'RECEIVED' || p.status === 'CANCELLED'"
+                  (click)="updateStatus(p, 'CANCELLED')" class="btn btn-danger">
                   Cancel
                 </button>
               </div>
             </td>
             <td>
               <button mat-raised-button color="primary" (click)="openViewDialog(p.id)">View</button>
-              <button mat-raised-button color="accent">Print</button>
+              <button mat-raised-button color="accent" (click)="generateReport(p.id)">Print</button>
             </td>
           </tr>
         </tbody>

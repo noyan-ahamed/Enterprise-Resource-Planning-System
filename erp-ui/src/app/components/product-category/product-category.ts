@@ -82,8 +82,7 @@ export class ProductCategory implements OnInit {
             icon: 'success',
             title: 'Updated!',
             text: 'Category updated successfully',
-            timer: 1500,
-            showConfirmButton: false
+            confirmButtonText: 'Ok'
           });
 
           
@@ -102,12 +101,11 @@ export class ProductCategory implements OnInit {
         next: () => {
 
           Swal.fire({
-            icon: 'success',
-            title: 'Saved!',
-            text: 'Category added successfully',
-            timer: 1500,
-            showConfirmButton: false
-          });
+  icon: 'success',
+  title: 'Saved!',
+  text: 'Category added successfully',
+  confirmButtonText: 'Ok'
+});
 
           // Form submit logic (e.g., send to API)
       this.showForm = false; // Hide form after submission

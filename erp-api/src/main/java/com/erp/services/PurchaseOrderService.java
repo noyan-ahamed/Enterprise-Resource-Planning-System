@@ -16,4 +16,6 @@ public interface PurchaseOrderService {
     PurchaseOrderHeader getById(Long id);
 
     void delete(Long id);
+
+    void sendPurchaseEmail(PurchaseOrderHeader order)  throws Exception;
 }

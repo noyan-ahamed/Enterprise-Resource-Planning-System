@@ -1,84 +1,80 @@
-<div class="modal-backdrop-custom" *ngIf="isOpen">
-  <div class="modal-box-custom">
-    <div class="modal-header-custom">
-      <h4 class="mb-0">
-        <i class="fa-solid fa-money-bill-wave me-2"></i>
-        Make Payment
-      </h4>
-      <button class="btn-close-custom" (click)="close()">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+<h2 mat-dialog-title class="bg-primary text-white m-0 p-3 d-flex justify-content-between align-items-center">
+  <span>
+    <i class="fa-solid fa-money-bill-wave me-2"></i>
+    Make Payment
+  </span>
+  <button mat-icon-button (click)="close()" class="text-white">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+</h2>
+
+<mat-dialog-content class="p-4">
+  <form #paymentForm="ngForm" class="row g-2 mt-2">
+    
+    <div class="col-12">
+      <mat-form-field appearance="outline" class="w-100 dense-field">
+        <mat-label>Supplier Name</mat-label>
+        <input matInput [value]="supplierName" readonly>
+        <mat-icon matPrefix class="me-2 text-secondary">person</mat-icon>
+      </mat-form-field>
     </div>
 
-    <div class="modal-body-custom">
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Supplier</label>
-        <input type="text" class="form-control" [value]="supplierName" readonly />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Amount</label>
-        <input
-          type="number"
-          class="form-control"
-          [(ngModel)]="paymentData.amount"
-          name="amount"
-          placeholder="Enter amount"
-        />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Payment Date</label>
-        <input
-          type="date"
-          class="form-control"
-          [(ngModel)]="paymentData.paymentDate"
-          name="paymentDate"
-        />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Payment Method</label>
-        <select
-          class="form-select"
-          [(ngModel)]="paymentData.paymentMethod"
-          name="paymentMethod"
-        >
-          <option *ngFor="let method of paymentMethods" [value]="method">
-            {{ method }}
-          </option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Purchase Order ID (Optional)</label>
-        <input
-          type="number"
-          class="form-control"
-          [(ngModel)]="paymentData.purchaseOrderId"
-          name="purchaseOrderId"
-          placeholder="Optional"
-        />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Remarks</label>
-        <textarea
-          rows="3"
-          class="form-control"
-          [(ngModel)]="paymentData.remarks"
-          name="remarks"
-          placeholder="Write remarks"
-        ></textarea>
-      </div>
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100 dense-field">
+        <mat-label>Payment Amount</mat-label>
+        <input matInput type="number" [(ngModel)]="paymentData.amount" name="amount" required placeholder="0.00">
+        <span matPrefix class="me-1">৳&nbsp;</span>
+      </mat-form-field>
     </div>
 
-    <div class="modal-footer-custom">
-      <button class="btn btn-light" (click)="close()">Cancel</button>
-      <button class="btn btn-success" (click)="savePayment()" [disabled]="loading">
-        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-        {{ loading ? 'Saving...' : 'Save Payment' }}
-      </button>
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100 dense-field">
+        <mat-label>Payment Date</mat-label>
+        <input matInput type="date" [(ngModel)]="paymentData.paymentDate" name="paymentDate" required>
+      </mat-form-field>
     </div>
-  </div>
-</div>
+
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100 dense-field">
+        <mat-label>Payment Method</mat-label>
+        <mat-select [(ngModel)]="paymentData.paymentMethod" name="paymentMethod" required>
+          @for (method of paymentMethods; track method) {
+            <mat-option [value]="method">{{ method }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100 dense-field">
+        <mat-label>Order ID (Optional)</mat-label>
+        <input matInput type="number" [(ngModel)]="paymentData.purchaseOrderId" name="purchaseOrderId" placeholder="Ex: 1001">
+      </mat-form-field>
+    </div>
+
+    <div class="col-12">
+      <mat-form-field appearance="outline" class="w-100 dense-field">
+        <mat-label>Remarks / Note</mat-label>
+        <textarea matInput rows="2" [(ngModel)]="paymentData.remarks" name="remarks" placeholder="Write any specific note..."></textarea>
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="p-3 border-top">
+  <button mat-button (click)="close()">Cancel</button>
+  
+  <button mat-raised-button 
+          color="primary" 
+          (click)="savePayment()" 
+          [disabled]="!paymentForm.valid || loading">
+    @if (loading) {
+      <span class="spinner-border spinner-border-sm me-2"></span>
+      Saving...
+    } @else {
+      <i class="fa-solid fa-check-circle me-2"></i>
+      Confirm Payment
+    }
+  </button>
+</mat-dialog-actions>

@@ -1,113 +1,74 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges  } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SupplierPaymentRequest } from '../../../models/supplier-ledger.model';
 import { SupplierLedgerService } from '../../../services/supplier-ledger.service';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-supplier-payment-modal',
-  standalone:true,
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [
+    CommonModule, FormsModule, ReactiveFormsModule, MatDialogModule,
+    MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule
+  ],
   templateUrl: './supplier-payment-modal.component.html',
   styleUrl: './supplier-payment-modal.component.scss',
 })
-export class SupplierPaymentModalComponent {
+export class SupplierPaymentModalComponent implements OnInit {
+  // Injectors
+  private dialogRef = inject(MatDialogRef<SupplierPaymentModalComponent>);
+  private data = inject(MAT_DIALOG_DATA); // { id: number, name: string }
+  private supplierLedgerService = inject(SupplierLedgerService);
 
-  @Input() isOpen: boolean = false;
-  @Input() supplierId!: number;
-  @Input() supplierName: string = 'Supplier';
-
-  @Output() closeModal = new EventEmitter<void>();
-  @Output() paymentSaved = new EventEmitter<void>();
-
+  supplierId = this.data.id;
+  supplierName = this.data.name;
   loading = false;
-
   paymentMethods = ['CASH', 'BANK', 'BKASH', 'NAGAD'];
 
   paymentData: SupplierPaymentRequest = {
-    supplierId: 0,
+    supplierId: this.supplierId,
     amount: 0,
-    paymentDate: '',
+    paymentDate: new Date().toISOString().split('T')[0],
     paymentMethod: 'CASH',
     remarks: '',
     purchaseOrderId: null
   };
 
-  constructor(private supplierLedgerService: SupplierLedgerService) {}
-
-  ngOnChanges(): void {
-    if (this.isOpen) {
-      this.resetForm();
-    }
-  }
-
-  resetForm(): void {
-    this.paymentData = {
-      supplierId: this.supplierId,
-      amount: 0,
-      paymentDate: this.todayDate(),
-      paymentMethod: 'CASH',
-      remarks: '',
-      purchaseOrderId: null
-    };
-  }
-
-  todayDate(): string {
-    return new Date().toISOString().split('T')[0];
-  }
+  ngOnInit(): void {}
 
   savePayment(): void {
     if (!this.paymentData.amount || this.paymentData.amount <= 0) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Invalid Amount',
-        text: 'Please enter a valid payment amount.'
-      });
+      Swal.fire({ icon: 'warning', title: 'Invalid Amount', text: 'Please enter a valid amount.' });
       return;
     }
 
-    if (!this.paymentData.paymentDate) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Date',
-        text: 'Please select payment date.'
-      });
-      return;
-    }
-
-    this.paymentData.supplierId = this.supplierId;
     this.loading = true;
-
     this.supplierLedgerService.createSupplierPayment(this.paymentData).subscribe({
       next: () => {
         this.loading = false;
-
         Swal.fire({
           icon: 'success',
           title: 'Payment Saved',
-          text: 'Supplier payment recorded successfully.',
-          timer: 1800,
+          timer: 1500,
           showConfirmButton: false
         });
-
-        this.paymentSaved.emit();
-        this.close();
+        this.dialogRef.close(true); // Success হলে true রিটার্ন করবে
       },
       error: (err) => {
         this.loading = false;
-        console.error(err);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Payment Failed',
-          text: 'Could not save supplier payment.'
-        });
+        Swal.fire({ icon: 'error', title: 'Payment Failed' });
       }
     });
   }
 
   close(): void {
-    this.closeModal.emit();
+    this.dialogRef.close(false);
   }
 }

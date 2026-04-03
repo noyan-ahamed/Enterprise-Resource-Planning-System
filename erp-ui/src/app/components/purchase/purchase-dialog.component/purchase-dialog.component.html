@@ -1,92 +1,147 @@
+<h2 mat-dialog-title class="bg-primary text-white m-0 p-3">
+  New Purchase Order
+</h2>
 
+<mat-dialog-content class="p-4">
+  <form #purchaseForm="ngForm" class="row g-3">
 
-<h2 mat-dialog-title>New Purchase Order</h2>
-<mat-dialog-content>
-  <form #purchaseForm="ngForm"  class="container-fluid">
-    <div class="row">
-
-      <!-- Supplier -->
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Supplier</label>
-        <select class="form-select" name="supplierId" [(ngModel)]="newPurchase.supplierId" required>
-          <option value="">Select Supplier</option>
-          @for (s of suppliers(); track s.id) {
-            <option [value]="s.id">{{s.name}}</option>
-          }
-        </select>
+    <!-- Supplier -->
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Supplier</mat-label>
+    <mat-select [(ngModel)]="newPurchase.supplierId" name="supplierId" required>
+      <div class="p-2">
+        <input matInput 
+               class="form-control border-bottom mb-2" 
+               placeholder="Search Supplier..." 
+               [(ngModel)]="supplierSearch" 
+               name="supSearch"
+               (input)="filterSuppliers()">
       </div>
-
-      <!-- Payment Terms -->
-      <div class="col-md-6 mb-3">
-        <label class="form-label">Payment Terms</label>
-        <select class="form-select" name="paymentTerms" [(ngModel)]="newPurchase.paymentTerms">
-          <option value="7 Days">7 Days</option>
-          <option value="15 Days">15 Days</option>
-          <option value="30 Days">30 Days</option>
-        </select>
-      </div>
+      
+      <mat-option value="" selected disabled="true">Select Supplier</mat-option>
+      @for (s of filteredSuppliers(); track s.id) {
+        <mat-option [value]="s.id">{{ s.name }}</mat-option>
+      }
+    </mat-select>
+      </mat-form-field>
     </div>
 
-    <hr>
-    <h5>Items</h5>
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead class="bg-light">
+    <!-- Payment Terms -->
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Payment Terms</mat-label>
+        <mat-select [(ngModel)]="newPurchase.paymentTerms" name="paymentTerms">
+          <mat-option value="7 Days">7 Days</mat-option>
+          <mat-option value="15 Days">15 Days</mat-option>
+          <mat-option value="30 Days">30 Days</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Divider -->
+    <div class="col-12">
+      <hr>
+      <h5 class="fw-bold">Items</h5>
+    </div>
+
+    <!-- Items Table -->
+    <div class="col-12">
+  <div class="table-responsive" style="overflow: hidden;"> <table class="table table-sm align-middle" style="table-layout: fixed; width: 100%;">
+      <thead class="bg-light">
+        <tr>
+          <th style="width: 35%;">Product</th>
+          <th style="width: 70px;">Qty</th>
+          <th style="width: 90px;">Unit</th>
+          <th style="width: 100px;">Price</th>
+          <th style="width: 90px;" class="text-end">Total</th>
+          <th style="width: 40px;">#</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (item of newPurchase.items; track $index) {
           <tr>
-            <th style="width: 40%;">Product</th>
-            <th>Quantity</th>
-            <th>Unit</th>
-            <th>Unit Price</th>
-            <th>Line Total</th>
-            <th>#</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of newPurchase.items; track $index) {
-            <tr>
-              <td>
-                <select class="form-select" [(ngModel)]="item.productId" [name]="'prod'+$index" (change)="calculateTotal()">
-                  <option value="">Select Product</option>
-                  @for (p of products(); track p.id) {
-                    <option [value]="p.id">{{p.name}}</option>
+            <td>
+              <mat-form-field appearance="outline" class="w-100 dense-field">
+                <mat-select [(ngModel)]="item.productId" [name]="'prod'+$index" (selectionChange)="calculateTotal()">
+                  <div class="p-2">
+                    <input matInput class="form-control border-bottom mb-2" placeholder="Search..." 
+                           [(ngModel)]="item.search" [name]="'prodSearch'+$index" (input)="filterProducts($index)">
+                  </div>
+                  <mat-option value="" disabled="true">Select Product</mat-option>
+                  @for (p of item.filteredProducts; track p.id) {
+                    <mat-option [value]="p.id">{{ p.name }}</mat-option>
                   }
-                </select>
-              </td>
+                </mat-select>
+              </mat-form-field>
+            </td>
 
-              <td>
-                <input type="number" class="form-control" [(ngModel)]="item.quantity" [name]="'qty'+$index" (input)="calculateTotal()">
-              </td>
-              <td>
-                <select class="form-select" [(ngModel)]="item.unit" [name]="'unit'+$index">
-                <option value="">Select Unit</option>
-                <option value="Pcs">Pcs</option>
-                <option value="Kg">Kg</option>
-                <option value="Box">Box</option>
-              </select>
-              </td>
-              <td>
-                <input type="number" class="form-control" [(ngModel)]="item.unitPrice" [name]="'prc'+$index" (input)="calculateTotal()">
-              </td>
-              <td class="fw-bold">
-                {{ (item.quantity * item.unitPrice) | number }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeItem($index)">×</button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+            <td>
+              <mat-form-field appearance="outline" class="w-100 dense-field">
+                <input matInput type="number" [(ngModel)]="item.quantity" [name]="'qty'+$index" (input)="calculateTotal()">
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field appearance="outline" class="w-100 dense-field">
+                <mat-select [(ngModel)]="item.unit" [name]="'unit'+$index">
+                  <mat-option value="Pcs">Pcs</mat-option>
+                  <mat-option value="Kg">Kg</mat-option>
+                  <mat-option value="Box">Box</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field appearance="outline" class="w-100 dense-field">
+                <span matPrefix style="font-size: 11px;">৳</span>
+                <input matInput type="number" [(ngModel)]="item.unitPrice" [name]="'prc'+$index" (input)="calculateTotal()">
+              </mat-form-field>
+            </td>
+
+            <td class="fw-bold text-success text-end" style="font-size: 13px;">
+              {{ (item.quantity * item.unitPrice) | number }}
+            </td>
+
+            <td class="text-center">
+              <button type="button" class="btn text-danger p-0" (click)="removeItem($index)">
+                <span style="font-size: 18px;">×</span>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+    <!-- Bottom -->
+    <div class="col-12 d-flex justify-content-between align-items-center mt-2">
+      <button type="button"
+              class="btn btn-primary btn-sm"
+              (click)="addItem()">
+        + Add Product
+      </button>
+
+      <div class="h5">
+        Total:
+        <span class="text-success">
+          {{ newPurchase.totalAmount | number }}
+        </span>
+      </div>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mt-2">
-      <button type="button" class="btn btn-primary btn-sm" (click)="addItem()">+ Add Product</button>
-      <div class="h5">Total: <span class="text-success">{{newPurchase.totalAmount | number}}</span></div>
-    </div>
   </form>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
+<mat-dialog-actions align="end" class="p-3 border-top">
   <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" [disabled]="!purchaseForm.valid || newPurchase.items.length === 0" (click)="onSubmit()">Create Purchase</button>
+
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!purchaseForm.valid || newPurchase.items.length === 0"
+          (click)="createPurchase()">
+    Create Purchase
+  </button>
 </mat-dialog-actions>

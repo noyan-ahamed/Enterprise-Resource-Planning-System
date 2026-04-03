@@ -8,6 +8,7 @@ export class PurchaseOrderService {
 
   private http = inject(HttpClient);
   private baseUrl = 'http://localhost:8080/purchases';
+  private reportUrl = 'http://localhost:8080/reports';
 
   getAll() {
     return this.http.get<PurchaseOrder[]>(this.baseUrl);
@@ -28,4 +29,13 @@ export class PurchaseOrderService {
   delete(id: number) {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
+  getReport(id: number){
+  return this.http.get(`${this.reportUrl}/purchase-report?orderId=${id}`, {
+    responseType: 'blob'
+  });
+}
+
+sendMail(id: number){
+  return this.http.post(`${this.baseUrl}/${id}/send-email`, {}, { responseType: 'text' });
+}
 }

@@ -1,0 +1,55 @@
+.dashboard-filter-card {
+  min-width: 420px;
+}
+
+.dashboard-card {
+  transition: all 0.25s ease;
+  border-left: 5px solid transparent;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  .icon-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.sales-card { border-left-color: #0d6efd; }
+.month-sales-card { border-left-color: #3b82f6; }
+.profit-card { border-left-color: #198754; }
+.profit-month-card { border-left-color: #20c997; }
+.due-card { border-left-color: #dc3545; }
+.payable-card { border-left-color: #fd7e14; }
+.low-stock-card { border-left-color: #ffc107; }
+.product-card { border-left-color: #6f42c1; }
+
+.chart-box {
+  position: relative;
+  height: 320px;
+}
+
+.activity-feed {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  padding: 12px 0;
+  border-bottom: 1px dashed #dee2e6;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.table td, .table th {
+  vertical-align: middle;
+}

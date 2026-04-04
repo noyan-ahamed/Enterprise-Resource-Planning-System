@@ -14,17 +14,22 @@ import { CustomerLedgerComponent } from './components/customer-ledger/customer-l
 import { CustomerLedgerDetailsComponent } from './components/customer-ledger/customer-ledger-details.component/customer-ledger-details.component';
 import { CustomerDueCollectionComponent } from './components/customer-due-collection.component/customer-due-collection.component';
 import { ApprovedPaymentComponent } from './components/approved-payment.component/approved-payment.component';
+import { AdminDashboardComponent } from './components/dashboard/admin-dashboard.component/admin-dashboard.component';
 
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: "employee-layout",
+        redirectTo: "admin-layout",
         pathMatch: "full"
     },
     {
         path: 'admin-layout',
         component: AdminLayout,
         children: [
+            {
+                path: 'admin-dashboard',
+                component: AdminDashboardComponent
+            },
             {
                 path: 'product-category',
                 component: ProductCategory

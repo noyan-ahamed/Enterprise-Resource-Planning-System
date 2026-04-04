@@ -1,0 +1,376 @@
+<div class="container-fluid py-3">
+
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+      <h3 class="fw-bold mb-1">
+        <i class="fa-solid fa-chart-line me-2 text-primary"></i>
+        Admin Dashboard
+      </h3>
+      <p class="text-muted mb-0">Business performance overview</p>
+    </div>
+
+    <!-- Filter -->
+    <div class="card shadow-sm border-0 rounded-4 dashboard-filter-card">
+      <div class="card-body">
+        <div class="row g-2 align-items-end">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Filter</label>
+            <select
+              class="form-select"
+              [ngModel]="filterForm().filterType"
+              (ngModelChange)="updateFilter('filterType', $event)">
+              <option value="TODAY">Today</option>
+              <option value="WEEK">7 Days</option>
+              <option value="MONTH">30 Days</option>
+              <option value="YEAR">This Year</option>
+              <option value="CUSTOM">Custom</option>
+            </select>
+          </div>
+
+          @if (filterForm().filterType === 'CUSTOM') {
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">From</label>
+              <input
+                type="date"
+                class="form-control"
+                [ngModel]="filterForm().fromDate"
+                (ngModelChange)="updateFilter('fromDate', $event)">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">To</label>
+              <input
+                type="date"
+                class="form-control"
+                [ngModel]="filterForm().toDate"
+                (ngModelChange)="updateFilter('toDate', $event)">
+            </div>
+          }
+
+          <div class="col-md-2 d-flex gap-2">
+            <button class="btn btn-primary w-100" (click)="applyFilter()">
+              <i class="fa-solid fa-filter me-1"></i> Apply
+            </button>
+            <button class="btn btn-outline-secondary" (click)="resetFilter()">
+              <i class="fa-solid fa-rotate-left"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-xl-3 col-md-6">
+      <div class="card dashboard-card sales-card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="small text-muted mb-1">Today Sales</p>
+              <h4 class="fw-bold mb-0">{{ formatCurrency(summary().todaySales) }}</h4>
+            </div>
+            <div class="icon-circle"><i class="fa-solid fa-cart-shopping"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card dashboard-card month-sales-card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="small text-muted mb-1">This Month Sales</p>
+              <h4 class="fw-bold mb-0">{{ formatCurrency(summary().monthSales) }}</h4>
+            </div>
+            <div class="icon-circle"><i class="fa-solid fa-chart-column"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card dashboard-card profit-card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="small text-muted mb-1">Today Profit</p>
+              <h4 class="fw-bold mb-0">{{ formatCurrency(summary().todayProfit) }}</h4>
+            </div>
+            <div class="icon-circle"><i class="fa-solid fa-sack-dollar"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card dashboard-card profit-month-card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="small text-muted mb-1">This Month Profit</p>
+              <h4 class="fw-bold mb-0">{{ formatCurrency(summary().monthProfit) }}</h4>
+            </div>
+            <div class="icon-circle"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card dashboard-card due-card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="small text-muted mb-1">Customer Due</p>
+              <h4 class="fw-bold mb-0">{{ formatCurrency(summary().totalCustomerDue) }}</h4>
+            </div>
+            <div class="icon-circle"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card dashboard-card payable-card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="small text-muted mb-1">Supplier Payable</p>
+              <h4 class="fw-bold mb-0">{{ formatCurrency(summary().totalSupplierPayable) }}</h4>
+            </div>
+            <div class="icon-circle"><i class="fa-solid fa-truck-field"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card dashboard-card low-stock-card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="small text-muted mb-1">Low Stock Items</p>
+              <h4 class="fw-bold mb-0">{{ summary().lowStockCount }}</h4>
+            </div>
+            <div class="icon-circle"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card dashboard-card product-card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="small text-muted mb-1">Total Products</p>
+              <h4 class="fw-bold mb-0">{{ summary().totalProducts }}</h4>
+            </div>
+            <div class="icon-circle"><i class="fa-solid fa-boxes-stacked"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Sales Chart -->
+  <div class="card shadow-sm border-0 rounded-4 mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0 fw-bold">Sales & Profit Trend</h5>
+      </div>
+      <div class="chart-box">
+        <canvas #salesProfitChartCanvas></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bar + Pie -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">Sales Comparison</h5>
+          <div class="chart-box">
+            <canvas #monthlySalesChartCanvas></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">Payment Method Distribution</h5>
+          <div class="chart-box">
+            <canvas #paymentMethodChartCanvas></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Low Stock + Activity -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">
+            <i class="fa-solid fa-triangle-exclamation text-danger me-2"></i>
+            Low Stock Alerts
+          </h5>
+
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th>Stock</th>
+                  <th>Min</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (lowStockItems().length > 0) {
+                  @for (item of lowStockItems(); track item.productId) {
+                    <tr>
+                      <td>{{ item.productName }}</td>
+                      <td>{{ item.sku }}</td>
+                      <td>{{ item.stock }}</td>
+                      <td>{{ item.minStockLevel }}</td>
+                      <td>
+                        <span class="badge bg-danger">Low</span>
+                      </td>
+                    </tr>
+                  }
+                } @else {
+                  <tr>
+                    <td colspan="5" class="text-center text-muted py-4">No low stock items</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">
+            <i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>
+            Recent Activities
+          </h5>
+
+          <div class="activity-feed">
+            @if (recentActivities().length > 0) {
+              @for (activity of recentActivities(); track $index) {
+                <div class="activity-item d-flex justify-content-between align-items-start">
+                  <div>
+                    <span class="badge me-2" [ngClass]="getActivityBadgeClass(activity.type)">
+                      {{ activity.type }}
+                    </span>
+                    <div class="fw-semibold">{{ activity.title }}</div>
+                    <small class="text-muted">{{ activity.referenceNo }} • {{ activity.date }}</small>
+                  </div>
+                  <div class="fw-bold text-end">
+                    {{ formatCurrency(activity.amount) }}
+                  </div>
+                </div>
+              }
+            } @else {
+              <div class="text-center text-muted py-4">No recent activities</div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Products + Top Customers -->
+  <div class="row g-3">
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">
+            <i class="fa-solid fa-box-open text-success me-2"></i>
+            Top Products
+          </h5>
+
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th>Qty Sold</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (topProducts().length > 0) {
+                  @for (item of topProducts(); track item.productId) {
+                    <tr>
+                      <td>{{ item.productName }}</td>
+                      <td>{{ item.sku }}</td>
+                      <td>{{ item.totalSoldQty }}</td>
+                      <td>{{ formatCurrency(item.totalSoldAmount) }}</td>
+                    </tr>
+                  }
+                } @else {
+                  <tr>
+                    <td colspan="4" class="text-center text-muted py-4">No top product data</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">
+            <i class="fa-solid fa-users text-warning me-2"></i>
+            Top Customers
+          </h5>
+
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Customer</th>
+                  <th>Mobile</th>
+                  <th>Total Purchase</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (topCustomers().length > 0) {
+                  @for (item of topCustomers(); track item.customerId) {
+                    <tr>
+                      <td>{{ item.customerName }}</td>
+                      <td>{{ item.mobileNumber }}</td>
+                      <td>{{ formatCurrency(item.totalPurchaseAmount) }}</td>
+                    </tr>
+                  }
+                } @else {
+                  <tr>
+                    <td colspan="3" class="text-center text-muted py-4">No top customer data</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

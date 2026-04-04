@@ -182,13 +182,13 @@
           </h5>
 
           <div class="mb-3">
-            <label class="form-label">Sales Date</label>
-            <input
-              type="date"
-              class="form-control"
-              [ngModel]="saleForm().salesDate"
-              (ngModelChange)="updateSaleForm('salesDate', $event)">
-          </div>
+  <label class="form-label">Sales Date</label>
+  <input
+    type="date"
+    class="form-control"
+    [ngModel]="saleForm().salesDate"
+    readonly>
+</div>
 
           <div class="mb-3">
             <label class="form-label">Seller Employee ID</label>

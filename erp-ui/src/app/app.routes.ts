@@ -26,10 +26,15 @@ export const routes: Routes = [
         path: 'admin-layout',
         component: AdminLayout,
         children: [
-            {
-                path: 'admin-dashboard',
-                component: AdminDashboardComponent
-            },
+           {
+            path: '',
+            redirectTo: 'admin-dashboard',
+            pathMatch: 'full'
+        },
+        {
+            path: 'admin-dashboard',
+            component: AdminDashboardComponent
+        },
             {
                 path: 'product-category',
                 component: ProductCategory
@@ -82,6 +87,11 @@ export const routes: Routes = [
         path: 'employee-layout',
         component: EmployeeLayout,
         children: [
+            {
+                path: '',
+                redirectTo: 'new-sale-entry',
+                pathMatch: 'full'
+            },
             {
                 path: 'new-sale-entry',
                 component: NewSaleEntryComponent

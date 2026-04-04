@@ -123,7 +123,7 @@ FROM purchase_orders po
 			<text><![CDATA[Purchase Invoice]]></text>
 		</element>
 		<element kind="image" uuid="e0315a99-aeaf-45c3-a424-5c398b21cbfa" x="0" y="10" width="92" height="90">
-			<expression><![CDATA["C:\\Users\\ACER\\Desktop\\Noyon\\Enterprise-Resource-Planning-System\\erp-api\\src\\main\\resources\\static\\NSync.jpg"]]></expression>
+			<expression><![CDATA["D:\\IDB\\Project\\enterprise-resource-planning-system\\erp-api\\src\\main\\resources\\static\\NSync.jpg"]]></expression>
 		</element>
 	</title>
 	<pageHeader height="127" splitType="Stretch">

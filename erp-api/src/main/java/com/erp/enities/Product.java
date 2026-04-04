@@ -3,6 +3,7 @@ package com.erp.enities;
 import com.erp.enums.ProductStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -38,6 +39,10 @@ public class Product {
 
     @Formula("(SELECT ps.quantity FROM product_stocks ps WHERE ps.product_id = id)")
     private Long stock;
+
+    @JsonManagedReference
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
+    private ProductStock productStock;
 
 
     @Column(name = "min_stock_level")

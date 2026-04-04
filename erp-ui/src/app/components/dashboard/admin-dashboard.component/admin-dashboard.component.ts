@@ -83,6 +83,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       filter.toDate || undefined
     ).subscribe({
       next: (res: AdminDashboardResponse) => {
+  
         this.loading.set(false);
 
         this.summary.set(res.summary);
@@ -165,9 +166,27 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
         ]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: {
+    duration: 2000,
+    easing: 'easeInOutQuart'
+  },
+  interaction: {
+    mode: 'index',
+    intersect: false,
+  },
+  plugins: {
+    legend: { position: 'top' }
+  },
+  scales: {
+    y: { 
+      beginAtZero: true,
+      grid: { display: false } 
+    },
+    x: { grid: { display: false } }
+  }
+}
     });
   }
 
@@ -220,9 +239,17 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
         ]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: {
+    animateRotate: true,
+    animateScale: true,
+    duration: 2000
+  },
+  plugins: {
+    legend: { position: 'bottom' }
+  }
+}
     });
   }
 

@@ -1,55 +1,111 @@
-.dashboard-filter-card {
-  min-width: 420px;
+// Page Fade Animation
+.animate-page-fade {
+  animation: pageIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Icon Pulsing Effect
+.pulse-icon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+// Filter Glassmorphism
+.filter-glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+// KPI Cards Styling
 .dashboard-card {
-  transition: all 0.25s ease;
-  border-left: 5px solid transparent;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  cursor: pointer;
+  border-bottom: 4px solid transparent !important;
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
   }
 
-  .icon-circle {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
+  .icon-box {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    background: rgba(0, 0, 0, 0.05);
+    font-size: 1.25rem;
+    color: inherit;
   }
 }
 
-.sales-card { border-left-color: #0d6efd; }
-.month-sales-card { border-left-color: #3b82f6; }
-.profit-card { border-left-color: #198754; }
-.profit-month-card { border-left-color: #20c997; }
-.due-card { border-left-color: #dc3545; }
-.payable-card { border-left-color: #fd7e14; }
-.low-stock-card { border-left-color: #ffc107; }
-.product-card { border-left-color: #6f42c1; }
+// Colorful Card Gradients
+.sales-gradient { background: linear-gradient(135deg, #e0e7ff 0%, #ffffff 100%); color: #4338ca; border-bottom-color: #4338ca !important; }
+.month-gradient { background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%); color: #0369a1; border-bottom-color: #0369a1 !important; }
+.profit-gradient { background: linear-gradient(135deg, #dcfce7 0%, #ffffff 100%); color: #15803d; border-bottom-color: #15803d !important; }
+.month-profit-gradient { background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); color: #166534; border-bottom-color: #166534 !important; }
+.due-gradient { background: linear-gradient(135deg, #fee2e2 0%, #ffffff 100%); color: #b91c1c; border-bottom-color: #b91c1c !important; }
+.payable-gradient { background: linear-gradient(135deg, #ffedd5 0%, #ffffff 100%); color: #9a3412; border-bottom-color: #9a3412 !important; }
+.low-stock-gradient { background: linear-gradient(135deg, #fef9c3 0%, #ffffff 100%); color: #854d0e; border-bottom-color: #854d0e !important; }
+.product-gradient { background: linear-gradient(135deg, #f3e8ff 0%, #ffffff 100%); color: #7e22ce; border-bottom-color: #7e22ce !important; }
 
-.chart-box {
-  position: relative;
-  height: 320px;
+// Staggered Entrance Animation
+.animate-card {
+  opacity: 0;
+  animation: cardIn 0.5s ease-out forwards;
+  animation-delay: var(--delay);
 }
 
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+// Activity Feed Styling
 .activity-feed {
-  max-height: 420px;
+  max-height: 450px;
   overflow-y: auto;
+  padding-right: 5px;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 }
 
 .activity-item {
-  padding: 12px 0;
-  border-bottom: 1px dashed #dee2e6;
-
-  &:last-child {
-    border-bottom: none;
+  background: #f8fafc;
+  transition: 0.2s;
+  border-left: 3px solid transparent;
+  &:hover {
+    background: #f1f5f9;
+    border-left-color: #3b82f6;
+    transform: translateX(5px);
   }
 }
 
-.table td, .table th {
-  vertical-align: middle;
+// Chart Styling
+.chart-box {
+  position: relative;
+  height: 320px;
+  width: 100%;
+}
+
+.table {
+  thead th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+  }
+  td { padding: 1rem 0.75rem; }
 }

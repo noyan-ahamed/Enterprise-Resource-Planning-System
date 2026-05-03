@@ -5,6 +5,7 @@ import com.erp.enities.Supplier;
 import com.erp.repositories.SupplierRepository;
 import com.erp.services.SupplierService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SupplierServiceImplement implements SupplierService {
 
     private final SupplierRepository supplierRepo;
 
-    public SupplierServiceImplement(SupplierRepository supplierRepo) {
-        this.supplierRepo = supplierRepo;
-    }
 
     @Override
     public List<Supplier> getAllSupliers() {

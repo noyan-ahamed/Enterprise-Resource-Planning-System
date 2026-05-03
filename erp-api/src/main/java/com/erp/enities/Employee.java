@@ -16,9 +16,6 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, unique = true)
-    private String employeeCode;
-
     @Column(nullable = false)
     private String name;
 
@@ -28,9 +25,13 @@ public class Employee {
     @Column(name = "mobile_number")
     private String mobileNumber;
 
-    private String designation;
+    @ManyToOne
+    @JoinColumn(name = "designation_id")
+    private Designation designation;
 
-    private String department;
+//    @ManyToOne
+//    @JoinColumn(name = "department_id")
+//    private Department department;
 
     @Column(name = "joining_date")
     private LocalDate joiningDate;
@@ -41,20 +42,18 @@ public class Employee {
     @Column(name = "bank_account")
     private String bankAccount;
 
+    private String address;
+
     @Column(name = "created_at")
     private LocalDate createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDate.now();
-        updatedAt = LocalDate.now();
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDate.now();
-    }
 }

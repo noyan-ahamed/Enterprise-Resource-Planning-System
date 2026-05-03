@@ -3,6 +3,7 @@ package com.erp.controllers.admin_dashboard;
 import com.erp.dto.admin_dashboard.DashboardResponseDTO;
 import com.erp.services.DashboardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/admin-dashboard")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RequiredArgsConstructor
 public class DashboardController {
 

@@ -5,6 +5,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -41,4 +42,35 @@ public class MailServiceImplement implements MailService {
             throw new RuntimeException("Email sending failed");
         }
     }
+
+    //for sending employee email*****************
+    @Override
+    @Async
+    public void sendSimpleEmail(
+            String to,
+            String subject,
+            String body
+    ) {
+
+        try {
+
+            SimpleMailMessage message =
+                    new SimpleMailMessage();
+
+            message.setTo(to);
+            message.setSubject(subject);
+            message.setText(body);
+
+            javaMailSender.send(message);
+
+            log.info("Simple email sent to {}", to);
+
+        } catch (Exception e) {
+
+            log.error("Failed to send email {}", e.getMessage());
+
+            throw new RuntimeException("Email failed");
+        }
+    }
+
 }

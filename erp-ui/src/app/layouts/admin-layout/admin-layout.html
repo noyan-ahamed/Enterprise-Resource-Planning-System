@@ -106,13 +106,13 @@
 
         <!-- Reports -->
 
-        <!-- <a mat-list-item routerLink="reports.component">
+        <a mat-list-item routerLink="reports.component">
           <mat-icon>bar_chart</mat-icon>
           <span class="ms-2">Reports</span>
-        </a> -->
+        </a>
       </mat-expansion-panel>
 
-      <!-- Payroll Approval
+      <!-- Payroll Approval -->
       <mat-expansion-panel [expanded]="activeMenu === 'Payroll'" (opened)="setActive('Payroll')">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -125,13 +125,13 @@
           <mat-icon>check_circle</mat-icon>
           <span class="ms-2">Approve Payroll</span>
         </a>
-      </mat-expansion-panel> -->
+      </mat-expansion-panel>
 
       <!-- System Settings -->
-      <!-- <a mat-list-item routerLink="system-settings" (opened)="setActive('Settings')">
+      <a mat-list-item routerLink="system-settings" (opened)="setActive('Settings')">
         <mat-icon>settings</mat-icon>
         <span class="ms-2">System Settings</span>
-      </a> -->
+      </a>
 
     </mat-nav-list>
   </mat-sidenav>

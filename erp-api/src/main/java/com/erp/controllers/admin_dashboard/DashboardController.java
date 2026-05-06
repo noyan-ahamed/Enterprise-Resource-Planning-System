@@ -21,9 +21,9 @@ public class DashboardController {
 
     @GetMapping
     public DashboardResponseDTO getDashboard(
-            @RequestParam(defaultValue = "MONTH") String filterType,
-            @RequestParam(required = false) LocalDate fromDate,
-            @RequestParam(required = false) LocalDate toDate
+            @RequestParam(value = "filterType", defaultValue = "MONTH") String filterType,
+            @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
+            @RequestParam(value = "toDate", required = false) LocalDate toDate
     ) {
         return dashboardService.getDashboardData(filterType, fromDate, toDate);
     }

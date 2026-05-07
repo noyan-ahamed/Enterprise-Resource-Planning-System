@@ -30,19 +30,15 @@ public class EmployeeServiceImplement implements EmployeeService {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
 
-    // =========================
-    // GET ALL EMPLOYEES
-    // =========================
 
+    // GET ALL EMPLOYEES
     @Override
     public List<Employee> getAllEmployees() {
         return employeeRepo.findAll();
     }
 
-    // =========================
-    // GET EMPLOYEE BY ID
-    // =========================
 
+    // GET EMPLOYEE BY ID
     @Override
     public Employee getEmployeeById(Long id) {
 
@@ -52,10 +48,8 @@ public class EmployeeServiceImplement implements EmployeeService {
                 );
     }
 
-    // =========================
-    // CREATE HR
-    // =========================
 
+    // CREATE HR
     @Override
     @Transactional
     public Employee createHr(EmployeeDTO dto) {
@@ -63,10 +57,8 @@ public class EmployeeServiceImplement implements EmployeeService {
         return createEmployeeWithRole(dto, "HR");
     }
 
-    // =========================
-    // CREATE EMPLOYEE
-    // =========================
 
+    // CREATE EMPLOYEE
     @Override
     @Transactional
     public Employee createEmployee(EmployeeDTO dto) {
@@ -74,10 +66,8 @@ public class EmployeeServiceImplement implements EmployeeService {
         return createEmployeeWithRole(dto, "EMPLOYEE");
     }
 
-    // =========================
-    // UPDATE EMPLOYEE
-    // =========================
 
+    // UPDATE EMPLOYEE
     @Override
     @Transactional
     public Employee updateEmployee(Long id, EmployeeDTO dto) {
@@ -92,10 +82,7 @@ public class EmployeeServiceImplement implements EmployeeService {
         return employeeRepo.save(employee);
     }
 
-    // =========================
-    // DELETE EMPLOYEE
-    // =========================
-
+   // DELETE EMPLOYEE
     @Override
     public void deleteEmployee(Long id) {
 
@@ -112,10 +99,8 @@ public class EmployeeServiceImplement implements EmployeeService {
         employeeRepo.delete(employee);
     }
 
-    // =========================
-    // COMMON EMPLOYEE CREATION
-    // =========================
 
+    // COMMON EMPLOYEE CREATION
     private Employee createEmployeeWithRole(
             EmployeeDTO dto,
             String roleName
@@ -136,6 +121,7 @@ public class EmployeeServiceImplement implements EmployeeService {
         Users user = new Users();
 
         user.setUserName(dto.getEmail());
+        user.setName(dto.getName());
 
         user.setPassWord(
                 passwordEncoder.encode(temporaryPassword)
@@ -162,11 +148,11 @@ public class EmployeeServiceImplement implements EmployeeService {
                 employeeRepo.save(employee);
         System.out.println("Emp Password: " + temporaryPassword);
 
-//        sendCredentialEmail(
-//                dto.getEmail(),
-//                temporaryPassword,
-//                roleName
-//        );
+        sendCredentialEmail(
+                dto.getEmail(),
+                temporaryPassword,
+                roleName
+        );
 
         return savedEmployee;
     }
@@ -217,29 +203,27 @@ public class EmployeeServiceImplement implements EmployeeService {
                 .substring(0, 8);
     }
 
-    // =========================
-    // SEND LOGIN CREDENTIAL EMAIL
-    // =========================
 
-//    private void sendCredentialEmail(
-//            String email,
-//            String password,
-//            String role
-//    ) {
-//
-//        String subject = "ERP Account Created";
-//
-//        String body =
-//                "Your ERP account has been created.\n\n" +
-//                        "Username: " + email + "\n" +
-//                        "Temporary Password: " + password + "\n" +
-//                        "Role: " + role + "\n\n" +
-//                        "Please login and change your password.";
-//
-//        mailService.sendSimpleEmail(
-//                email,
-//                subject,
-//                body
-//        );
-//    }
+    // SEND LOGIN CREDENTIAL EMAIL
+    private void sendCredentialEmail(
+            String email,
+            String password,
+            String role
+    ) {
+
+        String subject = "ERP Account Created";
+
+        String body =
+                "Your ERP account has been created.\n\n" +
+                        "Username: " + email + "\n" +
+                        "Temporary Password: " + password + "\n" +
+                        "Role: " + role + "\n\n" +
+                        "Please login and change your password.";
+
+        mailService.sendSimpleEmail(
+                email,
+                subject,
+                body
+        );
+    }
 }

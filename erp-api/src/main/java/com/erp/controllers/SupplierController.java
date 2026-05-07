@@ -4,6 +4,7 @@ import com.erp.dto.SupplierDTO;
 import com.erp.enities.Supplier;
 import com.erp.services.SupplierService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/supplier")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class SupplierController {
     private final SupplierService supplierService;
 

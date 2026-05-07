@@ -24,10 +24,19 @@ public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    private String name;
     @Column(unique = true, nullable = false)
     private String userName;
     @Column(nullable = false)
     private String passWord;
+
+    @Lob
+    @Column(name = "profile_image", columnDefinition = "BYTEA")
+    @JsonIgnore
+    private byte[] profileImage;
+
+    private String profileImageType;
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 

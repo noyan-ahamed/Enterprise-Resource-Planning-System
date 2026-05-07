@@ -1,8 +1,11 @@
 package com.erp.services;
 
+import com.erp.dto.UserDTO;
 import com.erp.enities.Users;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -10,4 +13,10 @@ public interface UserService {
     List<Users> getAllUser();
 
    void initUserAndRole();
+    void uploadProfileImage(
+            MultipartFile file
+    ) throws IOException;
+
+    UserDTO getCurrentUser();
+
 }

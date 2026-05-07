@@ -32,4 +32,22 @@ public class DesignationController {
     public ResponseEntity<List<Designation>> searchByDeptId(@PathVariable Long id){
         return ResponseEntity.ok(designationService.designationByDeptId(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Designation> updateDesignation(
+            @PathVariable Long id,
+            @RequestBody Designation designation
+    ) {
+        return ResponseEntity.ok(
+                designationService.updateDesignation(id, designation)
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteDesignation(@PathVariable Long id) {
+
+        designationService.deleteDesignation(id);
+
+        return ResponseEntity.ok("Designation deleted successfully");
+    }
 }

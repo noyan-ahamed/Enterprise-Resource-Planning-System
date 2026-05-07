@@ -30,4 +30,21 @@ public class DesignationServiceImplement implements DesignationService {
     public List<Designation> designationByDeptId(Long id) {
         return designationRepository.findByDepartmentId(id);
     }
+
+    @Override
+    public Designation updateDesignation(Long id, Designation designation) {
+
+        Designation existing = designationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Designation not found"));
+
+        existing.setName(designation.getName());
+        existing.setDepartment(designation.getDepartment());
+
+        return designationRepository.save(existing);
+    }
+
+    @Override
+    public void deleteDesignation(Long id) {
+        designationRepository.deleteById(id);
+    }
 }

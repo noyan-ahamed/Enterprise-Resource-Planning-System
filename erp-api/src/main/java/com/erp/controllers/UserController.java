@@ -5,6 +5,7 @@ import com.erp.enities.Users;
 import com.erp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +43,7 @@ public class UserController {
         );
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','HR','EMPLOYEE')")
     @PutMapping("/upload-profile-image")
     public ResponseEntity<String> uploadProfileImage(
             @RequestParam("file") MultipartFile file
@@ -54,6 +56,7 @@ public class UserController {
         );
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','HR','EMPLOYEE')")
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser() {
 

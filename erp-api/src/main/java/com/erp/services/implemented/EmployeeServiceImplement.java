@@ -5,6 +5,7 @@ import com.erp.enities.Employee;
 import com.erp.enities.Role;
 import com.erp.enities.Users;
 import com.erp.enums.UserStatus;
+import com.erp.repositories.DesignationRepository;
 import com.erp.repositories.EmployeeRepository;
 import com.erp.repositories.RoleRepository;
 import com.erp.repositories.UsersRepository;
@@ -25,6 +26,7 @@ import java.util.UUID;
 public class EmployeeServiceImplement implements EmployeeService {
 
     private final EmployeeRepository employeeRepo;
+    private final DesignationRepository designationRepository;
     private final UsersRepository usersRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -172,10 +174,6 @@ public class EmployeeServiceImplement implements EmployeeService {
                 dto.getMobileNumber()
         );
 
-        employee.setDesignation(
-                dto.getDesignation()
-        );
-
         employee.setJoiningDate(
                 dto.getJoiningDate()
         );
@@ -191,6 +189,20 @@ public class EmployeeServiceImplement implements EmployeeService {
         employee.setAddress(
                 dto.getAddress()
         );
+
+        if(dto.getDesignationId() != null){
+
+            employee.setDesignation(
+
+                    designationRepository
+                            .findById(dto.getDesignationId())
+                            .orElseThrow(() ->
+                                    new RuntimeException(
+                                            "Designation not found"
+                                    )
+                            )
+            );
+        }
     }
 
 

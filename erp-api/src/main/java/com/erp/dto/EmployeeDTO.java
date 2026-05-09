@@ -13,7 +13,7 @@ public class EmployeeDTO {
 //    private String employeeCode;
     private String email;
     private String mobileNumber;
-    private Designation designation;
+    private Long designationId;
 //    private String department;
     private LocalDate joiningDate;
     private Double basicSalary;

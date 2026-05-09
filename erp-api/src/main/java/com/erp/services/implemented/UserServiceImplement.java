@@ -129,17 +129,17 @@ public class UserServiceImplement implements UserService {
         }
 
         return UserDTO.builder()
-                .id(user.getId())
+                .name(user.getName())
                 .username(user.getUsername())
                 .email(
                         user.getEmployee() != null
                                 ? user.getEmployee().getEmail()
                                 : user.getUsername()
                 )
+                .status(user.getStatus().name())
+                .createdAt(user.getCreated_at().toString())
                 .imageBase64(base64Image)
-                .imageType(
-                        user.getProfileImageType()
-                )
+                .imageType(user.getProfileImageType())
                 .build();
     }
 }

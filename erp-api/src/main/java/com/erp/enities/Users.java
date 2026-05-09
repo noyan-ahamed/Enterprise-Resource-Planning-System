@@ -31,8 +31,7 @@ public class Users implements UserDetails {
     @Column(nullable = false)
     private String passWord;
 
-    @Lob
-    @Column(name = "profile_image", columnDefinition = "BYTEA")
+    @Column(name = "profile_image", columnDefinition = "bytea")
     @JsonIgnore
     private byte[] profileImage;
 

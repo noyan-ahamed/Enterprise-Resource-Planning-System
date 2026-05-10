@@ -6,6 +6,7 @@ import com.erp.enities.ProductStock;
 import com.erp.repositories.ProductRepository;
 import com.erp.repositories.ProductStockRepository;
 import com.erp.services.ProductService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,10 @@ public class ProductServiceImplement implements ProductService {
     @Override
     public ResponseEntity<Product> createProduct(Product product) {
 
-        // ১. আগে product save
+        // first product save
         Product savedProduct = productRepo.save(product);
 
-        // ২. তারপর stock create
+        //then crate stock
         ProductStock stock = new ProductStock();
         stock.setProduct(savedProduct);
         stock.setQuantity(0); // default 0
@@ -49,5 +50,23 @@ public class ProductServiceImplement implements ProductService {
     @Override
     public void deleteProduct(long id) {
         productRepo.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public Product updateProduct(
+            Long id,
+            ProductDTO dto
+    ) {
+
+        Product product = productRepo.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Product not found")
+                );
+
+        // only name editable
+        product.setName(dto.getName());
+
+        return productRepo.save(product);
     }
 }

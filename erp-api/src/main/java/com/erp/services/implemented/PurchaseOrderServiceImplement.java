@@ -127,17 +127,17 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
     }
 
 
-    // মেইল পাঠানোর কমন প্রাইভেট মেথড
+//    common method for sending mail
     @Override
     public void sendPurchaseEmail(PurchaseOrderHeader order) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("ORDER_ID", BigDecimal.valueOf(order.getId()));
 
-        // ১. রিপোর্ট জেনারেট
+//        generate jasper report
         byte[] pdf = reportService.generateReport("purchase_report", params);
 
-        // ২. সাপ্লায়ার মেইল গেট করা
-        String supplierEmail = order.getSupplier().getEmail(); // আপনার Supplier এন্টিটিতে ইমেইল ফিল্ড থাকতে হবে
+        //get supplier mail
+        String supplierEmail = order.getSupplier().getEmail();
 
         if (supplierEmail != null && !supplierEmail.isEmpty()) {
             String subject = "Purchase Order Confirmation - " + order.getInvoiceNumber();

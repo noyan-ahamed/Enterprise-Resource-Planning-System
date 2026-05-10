@@ -6,6 +6,7 @@ import com.erp.enums.CustomerPaymentStatus;
 import com.erp.enums.PaymentMethod;
 import com.erp.enums.SalesStatus;
 import com.erp.repositories.*;
+import com.erp.services.InventoryService;
 import com.erp.services.InvoiceDeliveryService;
 import com.erp.services.LedgerService;
 import com.erp.services.SalesService;
@@ -32,6 +33,7 @@ public class SalesServiceImplement implements SalesService {
     private final LedgerService ledgerService;
     private final InvoiceNumberServiceImplement invoiceNumberService;
     private final InvoiceDeliveryService invoiceDeliveryService;
+    private final InventoryService inventoryService;
 
     @Override
     @Transactional
@@ -93,8 +95,10 @@ public class SalesServiceImplement implements SalesService {
             subTotal = subTotal.add(lineTotal);
 
             // stock deduction
-            stock.setQuantity(stock.getQuantity() - itemDTO.getQuantity());
-            productStockRepository.save(stock);
+            inventoryService.consumeStock(
+                    product,
+                    itemDTO.getQuantity()
+            );
         }
 
         BigDecimal discount = request.getDiscountAmount() != null ? request.getDiscountAmount() : BigDecimal.ZERO;

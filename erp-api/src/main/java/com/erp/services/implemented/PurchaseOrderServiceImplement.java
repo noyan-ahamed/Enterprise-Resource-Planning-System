@@ -4,10 +4,7 @@ import com.erp.dto.PurchaseItemDTO;
 import com.erp.dto.PurchaseOrderHeaderDTO;
 import com.erp.enities.*;
 import com.erp.enums.PurchaseStatus;
-import com.erp.repositories.ProductRepository;
-import com.erp.repositories.ProductStockRepository;
-import com.erp.repositories.PurchaseOrderHeaderRepository;
-import com.erp.repositories.SupplierRepository;
+import com.erp.repositories.*;
 import com.erp.services.LedgerService;
 import com.erp.services.MailService;
 import com.erp.services.PurchaseOrderService;
@@ -40,6 +37,7 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
 
     private final ReportService reportService;
     private final MailService mailService;
+    private final InventoryBatchRepository batchRepo;
 
     @Override
     @Transactional
@@ -98,30 +96,67 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
         order.setStatus(status);
 
         if (status == PurchaseStatus.RECEIVED) {
+
             for (PurchaseOrderItem item : order.getItems()) {
+
                 Product product = item.getProduct();
 
-                // ১. স্টক আপডেট
+                // STOCK UPDATE
                 ProductStock stock = stockRepo.findByProduct(product)
-                        .orElseThrow(() -> new RuntimeException("Stock not found"));;
+                        .orElse(null);
+
                 if (stock == null) {
                     stock = new ProductStock();
                     stock.setProduct(product);
                     stock.setQuantity(0);
                 }
-                stock.setQuantity(stock.getQuantity() + item.getQuantity());
+
+                stock.setQuantity(
+                        stock.getQuantity() + item.getQuantity()
+                );
+
                 stockRepo.save(stock);
 
-                // ২. সেলিং প্রাইস আপডেট (Selling Price = Purchase Price + 20%)
+                // SELLING PRICE UPDATE
                 BigDecimal purchasePrice = item.getUnitPrice();
-                BigDecimal profit = purchasePrice.multiply(new BigDecimal("0.20"));
-                BigDecimal newSellingPrice = purchasePrice.add(profit);
+
+                BigDecimal profit =
+                        purchasePrice.multiply(new BigDecimal("0.20"));
+
+                BigDecimal newSellingPrice =
+                        purchasePrice.add(profit);
 
                 product.setSellingPrice(newSellingPrice);
+
                 productRepo.save(product);
+
+                // FIFO BATCH CREATE
+                InventoryBatch batch = new InventoryBatch();
+
+                batch.setProduct(product);
+
+                batch.setPurchaseItem(item);
+
+                batch.setOriginalQuantity(item.getQuantity());
+
+                batch.setRemainingQuantity(item.getQuantity());
+
+                batch.setPurchasePrice(item.getUnitPrice());
+
+                batch.setReceivedDate(LocalDate.now());
+
+                batchRepo.save(batch);
             }
+
+            // ledger
             ledgerService.createSupplierPurchaseEntry(order);
 
+            // mail
+//            try {
+//                sendPurchaseEmail(order);
+//            } catch (Exception e) {
+//                log.error("Mail send failed");
+//            }
         }
        return purchaseRepo.save(order);
     }

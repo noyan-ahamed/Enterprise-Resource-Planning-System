@@ -8,12 +8,14 @@ import com.erp.services.InvoiceDeliveryService;
 import com.erp.services.PurchaseOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/purchases")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RequiredArgsConstructor
 public class PurchaseOrderController {
 

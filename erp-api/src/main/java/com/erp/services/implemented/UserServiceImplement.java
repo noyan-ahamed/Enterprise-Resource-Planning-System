@@ -31,6 +31,32 @@ public class UserServiceImplement implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final SecurityUtil securityUtil;
 
+
+    private void createInitRole(){
+        Role admin = roleRepository.findByName("ADMIN")
+                .orElseGet(() -> {
+
+                    Role newRole = new Role();
+
+                    newRole.setName("ADMIN");
+                    return roleRepository.save(newRole);
+                });
+        Role hr = roleRepository.findByName("HR")
+                .orElseGet(()->{
+                    Role newRoleHr = new Role();
+                    newRoleHr.setName("HR");
+                    return roleRepository.save(newRoleHr);
+                });
+        Role employee = roleRepository.findByName("EMPLOYEE")
+                .orElseGet(()->{
+                    Role newRoleEmployee = new Role();
+                    newRoleEmployee.setName("EMPLOYEE");
+                    return roleRepository.save(newRoleEmployee);
+                });
+
+    }
+
+
     @Override
     public Users createUser(Users user) {
 
@@ -47,6 +73,7 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public void initUserAndRole() {
+        createInitRole();
 
         if (userRepo.findByUserName(
                 "noyan@gmail.com"
@@ -142,4 +169,6 @@ public class UserServiceImplement implements UserService {
                 .imageType(user.getProfileImageType())
                 .build();
     }
+
+
 }

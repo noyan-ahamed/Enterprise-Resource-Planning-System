@@ -146,7 +146,7 @@ export class Products implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.loadCategories(); // ✅ only this (important fix)
+    this.loadCategories();
   }
 
   // ---------------- FORM ----------------
@@ -156,7 +156,7 @@ export class Products implements OnInit {
       name: ['', Validators.required],
       sku: ['', Validators.required],
       category: [ProductCategory, Validators.required],
-      sellingPrice: [{value:'', disabled:true}], // ✅ FIX (was disabled আগে)
+      sellingPrice: [{value:'', disabled:true}],
       minStockLevel: [5],
       status: ['ACTIVE']
     });
@@ -209,7 +209,7 @@ export class Products implements OnInit {
       next: () => {
         Swal.fire('Saved!', 'New product added to inventory.', 'success');
 
-        this.loadProducts(); // ✅ auto refresh
+        this.loadProducts(); 
         this.resetForm();
       },
       error: () => {

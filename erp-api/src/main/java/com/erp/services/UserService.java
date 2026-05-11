@@ -1,5 +1,7 @@
 package com.erp.services;
 
+import com.erp.dto.ChangePasswordDTO;
+import com.erp.dto.FirstPasswordChangeDTO;
 import com.erp.dto.UserDTO;
 import com.erp.enities.Users;
 import org.springframework.http.ResponseEntity;
@@ -19,4 +21,11 @@ public interface UserService {
 
     UserDTO getCurrentUser();
 
+    void firstLoginPasswordChange(
+            FirstPasswordChangeDTO dto
+    );
+
+    void changePassword(
+            ChangePasswordDTO dto
+    );
 }

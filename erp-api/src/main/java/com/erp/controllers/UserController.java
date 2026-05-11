@@ -1,5 +1,7 @@
 package com.erp.controllers;
 
+import com.erp.dto.ChangePasswordDTO;
+import com.erp.dto.FirstPasswordChangeDTO;
 import com.erp.dto.UserDTO;
 import com.erp.enities.Users;
 import com.erp.services.UserService;
@@ -64,4 +66,33 @@ public class UserController {
                 userService.getCurrentUser()
         );
     }
+
+
+    @PostMapping("/first-password-change")
+    @PreAuthorize("hasAnyAuthority('ADMIN','HR','EMPLOYEE')")
+    public ResponseEntity<?> firstChange(
+            @RequestBody FirstPasswordChangeDTO dto
+    ){
+
+        userService.firstLoginPasswordChange(dto);
+
+        return ResponseEntity.ok(
+                "Password changed successfully"
+        );
+    }
+
+
+    @PostMapping("/change-password")
+    @PreAuthorize("hasAnyAuthority('ADMIN','HR','EMPLOYEE')")
+    public ResponseEntity<?> changePassword(
+            @RequestBody ChangePasswordDTO dto
+    ){
+
+        userService.changePassword(dto);
+
+        return ResponseEntity.ok(
+                "Password changed successfully"
+        );
+    }
+
 }

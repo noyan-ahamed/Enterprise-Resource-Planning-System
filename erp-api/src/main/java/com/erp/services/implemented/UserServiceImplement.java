@@ -1,6 +1,8 @@
 package com.erp.services.implemented;
 
 import com.erp.config.SecurityUtil;
+import com.erp.dto.ChangePasswordDTO;
+import com.erp.dto.FirstPasswordChangeDTO;
 import com.erp.dto.UserDTO;
 import com.erp.enities.Role;
 import com.erp.enities.Users;
@@ -168,6 +170,80 @@ public class UserServiceImplement implements UserService {
                 .imageBase64(base64Image)
                 .imageType(user.getProfileImageType())
                 .build();
+    }
+
+    @Override
+    public void firstLoginPasswordChange(
+            FirstPasswordChangeDTO dto
+    ) {
+
+        Users user = securityUtil.getCurrentUser();
+
+        if(user.isPasswordChanged()){
+
+            throw new RuntimeException(
+                    "Password already changed"
+            );
+        }
+
+        if(!dto.getNewPassword()
+                .equals(dto.getConfirmPassword())){
+
+            throw new RuntimeException(
+                    "Passwords do not match"
+            );
+        }
+
+        user.setPassWord(
+                passwordEncoder.encode(
+                        dto.getNewPassword()
+                )
+        );
+
+        user.setPasswordChanged(true);
+
+        userRepo.save(user);
+    }
+
+    @Override
+    public void changePassword(
+            ChangePasswordDTO dto
+    ) {
+
+        Users user = securityUtil.getCurrentUser();
+
+        // current password check
+        boolean matches =
+                passwordEncoder.matches(
+                        dto.getCurrentPassword(),
+                        user.getPassword()
+                );
+
+        if(!matches){
+
+            throw new RuntimeException(
+                    "Current password incorrect"
+            );
+        }
+
+        // confirm password check
+        if(!dto.getNewPassword()
+                .equals(dto.getConfirmPassword())){
+
+            throw new RuntimeException(
+                    "Passwords do not match"
+            );
+        }
+
+        user.setPassWord(
+                passwordEncoder.encode(
+                        dto.getNewPassword()
+                )
+        );
+
+        user.setPasswordChanged(true);
+
+        userRepo.save(user);
     }
 
 

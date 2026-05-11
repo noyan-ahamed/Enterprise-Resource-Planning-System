@@ -37,8 +37,8 @@ public class Product {
     private BigDecimal sellingPrice;
 
 
-    @Formula("(SELECT ps.quantity FROM product_stocks ps WHERE ps.product_id = id)")
-    private Long stock;
+    @Formula("(SELECT COALESCE(ps.quantity,0) FROM product_stocks ps WHERE ps.product_id = id)")
+    private Integer stock;
 
     @JsonManagedReference
     @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)

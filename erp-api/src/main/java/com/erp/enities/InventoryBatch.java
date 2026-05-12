@@ -34,6 +34,7 @@ public class InventoryBatch {
 
     // purchase price
     private BigDecimal purchasePrice;
+    private BigDecimal sellingPrice;
 
     // received date
     private LocalDate receivedDate;

@@ -122,9 +122,6 @@ FROM purchase_orders po
 		<element kind="staticText" uuid="bf231fae-431b-4908-8159-c13a0debdca2" x="140" y="53" width="300" height="40" forecolor="#FC1814" fontName="Gadugi" fontSize="16.0" bold="true" hTextAlign="Center" vTextAlign="Top">
 			<text><![CDATA[Purchase Invoice]]></text>
 		</element>
-		<element kind="image" uuid="e0315a99-aeaf-45c3-a424-5c398b21cbfa" x="0" y="10" width="92" height="90">
-			<expression><![CDATA["D:\\IDB\\Project\\enterprise-resource-planning-system\\erp-api\\src\\main\\resources\\static\\NSync.jpg"]]></expression>
-		</element>
 	</title>
 	<pageHeader height="127" splitType="Stretch">
 		<element kind="staticText" uuid="57850f3b-30b7-46a1-82b5-6506ad073462" x="10" y="0" width="80" height="30" fontName="Times New Roman" fontSize="14.0" vTextAlign="Middle">

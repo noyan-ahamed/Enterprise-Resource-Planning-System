@@ -77,28 +77,63 @@ public class SalesServiceImplement implements SalesService {
                 throw new RuntimeException("Insufficient stock for product: " + product.getName());
             }
 
-            if (product.getSellingPrice() == null || product.getSellingPrice().compareTo(BigDecimal.ZERO) <= 0) {
-                throw new RuntimeException("Selling price not set for product: " + product.getName());
+//            if (product.getSellingPrice() == null || product.getSellingPrice().compareTo(BigDecimal.ZERO) <= 0) {
+//                throw new RuntimeException("Selling price not set for product: " + product.getName());
+//            }
+//
+//            BigDecimal unitPrice = product.getSellingPrice();
+//            BigDecimal lineTotal = unitPrice.multiply(BigDecimal.valueOf(itemDTO.getQuantity()));
+//
+//            SalesOrderItem item = new SalesOrderItem();
+//            item.setSalesOrder(salesOrder);
+//            item.setProduct(product);
+//            item.setQuantity(itemDTO.getQuantity());
+//            item.setUnitPrice(unitPrice);
+//            item.setLineTotal(lineTotal);
+//
+//            itemEntities.add(item);
+//            subTotal = subTotal.add(lineTotal);
+//
+//            // stock deduction
+//            inventoryService.consumeStock(
+//                    product,
+//                    itemDTO.getQuantity()
+//            );
+
+            // FIFO stock deduction + batch fetch
+            List<ConsumedBatchDTO> consumedBatches =
+                    inventoryService.consumeStock(
+                            product,
+                            itemDTO.getQuantity()
+                    );
+
+            for (ConsumedBatchDTO consumed : consumedBatches) {
+
+                InventoryBatch batch = consumed.getBatch();
+
+                BigDecimal unitPrice = batch.getSellingPrice();
+
+                BigDecimal lineTotal =
+                        unitPrice.multiply(
+                                BigDecimal.valueOf(consumed.getQuantity())
+                        );
+
+                SalesOrderItem item = new SalesOrderItem();
+
+                item.setSalesOrder(salesOrder);
+
+                item.setProduct(product);
+
+                item.setQuantity(consumed.getQuantity());
+
+                item.setUnitPrice(unitPrice);
+
+                item.setLineTotal(lineTotal);
+
+                itemEntities.add(item);
+
+                subTotal = subTotal.add(lineTotal);
             }
-
-            BigDecimal unitPrice = product.getSellingPrice();
-            BigDecimal lineTotal = unitPrice.multiply(BigDecimal.valueOf(itemDTO.getQuantity()));
-
-            SalesOrderItem item = new SalesOrderItem();
-            item.setSalesOrder(salesOrder);
-            item.setProduct(product);
-            item.setQuantity(itemDTO.getQuantity());
-            item.setUnitPrice(unitPrice);
-            item.setLineTotal(lineTotal);
-
-            itemEntities.add(item);
-            subTotal = subTotal.add(lineTotal);
-
-            // stock deduction
-            inventoryService.consumeStock(
-                    product,
-                    itemDTO.getQuantity()
-            );
         }
 
         BigDecimal discount = request.getDiscountAmount() != null ? request.getDiscountAmount() : BigDecimal.ZERO;

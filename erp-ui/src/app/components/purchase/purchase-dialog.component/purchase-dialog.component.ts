@@ -189,9 +189,8 @@ export class PurchaseDialogComponent implements OnInit {
           denyButton: 'order-2',
           cancelButton: 'order-3',
         },
-        target: 'body' // নিশ্চিত করা যে এটি ডায়ালগের ওপরে আসবে
+        target: 'body' 
       }).then((result) => {
-        // PDF ওপেন করা
         if (result.isConfirmed) {
           this.viewInvoicePDF(orderId);
           this.dialogRef.close(true); 

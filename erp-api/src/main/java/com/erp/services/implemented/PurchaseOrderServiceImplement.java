@@ -54,7 +54,7 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
 
         List<PurchaseOrderItem> items = new ArrayList<>();
 
-        for(PurchaseItemDTO itemDTO : dto.getItems()){
+        for (PurchaseItemDTO itemDTO : dto.getItems()) {
 
             Product product = productRepo.findById(itemDTO.getProductId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -89,7 +89,7 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
         // RECEIVED ba CANCELED hoye gele ar status change kora jabe na
-        if(order.getStatus() == PurchaseStatus.RECEIVED || order.getStatus() == PurchaseStatus.CANCELLED) {
+        if (order.getStatus() == PurchaseStatus.RECEIVED || order.getStatus() == PurchaseStatus.CANCELLED) {
             throw new RuntimeException("Order is already " + order.getStatus() + " and cannot be modified.");
         }
 
@@ -118,15 +118,15 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
                 stockRepo.save(stock);
 
                 // SELLING PRICE UPDATE
-                BigDecimal purchasePrice = item.getUnitPrice();
+//                BigDecimal purchasePrice = item.getUnitPrice();
 
-                BigDecimal profit =
-                        purchasePrice.multiply(new BigDecimal("0.20"));
+//                BigDecimal profit =
+//                        purchasePrice.multiply(new BigDecimal("0.20"));
 
-                BigDecimal newSellingPrice =
-                        purchasePrice.add(profit);
-
-                product.setSellingPrice(newSellingPrice);
+//                BigDecimal newSellingPrice =
+//                        purchasePrice.add(profit);
+//
+//                product.setSellingPrice(newSellingPrice);
 
                 productRepo.save(product);
 
@@ -143,6 +143,20 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
 
                 batch.setPurchasePrice(item.getUnitPrice());
 
+                // SELLING PRICE
+                BigDecimal purchasePrice = item.getUnitPrice();
+
+                BigDecimal sellingPrice =
+                        purchasePrice.multiply(new BigDecimal("1.20"));
+
+                // update product display price
+                product.setSellingPrice(sellingPrice);
+
+                productRepo.save(product);
+
+                // batch selling price
+                batch.setSellingPrice(sellingPrice);
+
                 batch.setReceivedDate(LocalDate.now());
 
                 batchRepo.save(batch);
@@ -158,11 +172,11 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
 //                log.error("Mail send failed");
 //            }
         }
-       return purchaseRepo.save(order);
+        return purchaseRepo.save(order);
     }
 
 
-//    common method for sending mail
+    //    common method for sending mail
     @Override
     public void sendPurchaseEmail(PurchaseOrderHeader order) throws Exception {
         Map<String, Object> params = new HashMap<>();
@@ -184,7 +198,9 @@ public class PurchaseOrderServiceImplement implements PurchaseOrderService {
 
     @Override
     public List<PurchaseOrderHeader> getAllOrders() {
-        return purchaseRepo.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return purchaseRepo.findAll(
+                Sort.by(Sort.Direction.DESC, "id")
+        );
     }
 
     @Override

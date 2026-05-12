@@ -1,5 +1,6 @@
 package com.erp.services.implemented;
 
+import com.erp.dto.ConsumedBatchDTO;
 import com.erp.enities.InventoryBatch;
 import com.erp.enities.Product;
 import com.erp.enities.ProductStock;
@@ -10,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +25,7 @@ public class InventoryServiceImplement
 
     @Override
     @Transactional
-    public void consumeStock(Product product, Integer sellQty) {
+    public List<ConsumedBatchDTO> consumeStock(Product product, Integer sellQty) {
 
         List<InventoryBatch> batches =
                 batchRepo
@@ -34,6 +36,8 @@ public class InventoryServiceImplement
 
         int remaining = sellQty;
 
+        List<ConsumedBatchDTO> consumedList = new ArrayList<>();
+
         for (InventoryBatch batch : batches) {
 
             if (remaining <= 0) {
@@ -42,24 +46,21 @@ public class InventoryServiceImplement
 
             int available = batch.getRemainingQuantity();
 
-            // enough qty in batch
-            if (available >= remaining) {
+            // how much consume from this batch
+            int consumeQty = Math.min(available, remaining);
 
-                batch.setRemainingQuantity(
-                        available - remaining
-                );
-
-                remaining = 0;
-
-            } else {
-
-                // consume full batch
-                batch.setRemainingQuantity(0);
-
-                remaining = remaining - available;
-            }
+            // reduce batch qty
+            batch.setRemainingQuantity(
+                    available - consumeQty
+            );
 
             batchRepo.save(batch);
+
+            consumedList.add(
+                    new ConsumedBatchDTO(batch, consumeQty)
+            );
+
+            remaining = remaining - consumeQty;
         }
 
         // stock shortage
@@ -82,5 +83,7 @@ public class InventoryServiceImplement
         );
 
         stockRepo.save(stock);
+
+        return consumedList;
     }
 }

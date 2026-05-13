@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 export class SalesService {
 
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/sales'; // তোমার backend অনুযায়ী change করো
+  private baseUrl = 'http://localhost:8080/sales';
 
   createSale(payload: SalesCreateRequest): Observable<SalesResponse> {
     return this.http.post<SalesResponse>(this.baseUrl, payload);

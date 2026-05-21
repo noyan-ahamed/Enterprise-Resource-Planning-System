@@ -1,1 +1,115 @@
-<p>login-component works!</p>
+<div class="login-page">
+
+  <div class="login-wrapper">
+
+    <div class="login-left">
+
+      <div class="brand-content">
+
+        <div class="logo-box">
+          NS
+        </div>
+
+        <h1>NSync ERP</h1>
+
+        <p>
+          Smart Enterprise Resource Planning Solution
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="login-right">
+
+      <div class="login-card">
+
+        <div class="welcome-text">
+
+          <small>Please enter your details</small>
+
+          <h2>Welcome Back</h2>
+
+        </div>
+
+        <form
+          #loginForm="ngForm"
+          (ngSubmit)="login(loginForm)"
+        >
+
+          <mat-form-field appearance="outline" class="custom-field">
+
+            <mat-label>Email Address</mat-label>
+
+            <input
+              matInput
+              type="email"
+              ngModel
+              name="userName"
+              required
+            >
+
+            <mat-icon matSuffix>mail</mat-icon>
+
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="custom-field">
+
+            <mat-label>Password</mat-label>
+
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              ngModel
+              name="userPassword"
+              required
+            >
+
+            <button
+              type="button"
+              mat-icon-button
+              matSuffix
+              (click)="hidePassword = !hidePassword"
+            >
+
+              <mat-icon>
+                {{ hidePassword ? 'visibility_off' : 'visibility' }}
+              </mat-icon>
+
+            </button>
+
+          </mat-form-field>
+
+          <div class="options">
+
+            <label class="remember">
+
+              <input type="checkbox">
+
+              <span>Remember me</span>
+
+            </label>
+
+            <a href="#">
+              Forgot Password?
+            </a>
+
+          </div>
+
+          <button
+            type="submit"
+            class="login-btn"
+            [disabled]="loginForm.invalid"
+          >
+            Sign In
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

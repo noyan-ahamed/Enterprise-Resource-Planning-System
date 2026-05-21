@@ -15,12 +15,17 @@ import { CustomerLedgerDetailsComponent } from './components/customer-ledger/cus
 import { CustomerDueCollectionComponent } from './components/customer-due-collection.component/customer-due-collection.component';
 import { ApprovedPaymentComponent } from './components/approved-payment.component/approved-payment.component';
 import { AdminDashboardComponent } from './components/dashboard/admin-dashboard.component/admin-dashboard.component';
+import { LoginComponent } from './components/login-component/login-component';
 
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: "admin-layout",
+        redirectTo: "login-component",
         pathMatch: "full"
+    },
+    {
+        path: 'login-component',
+        component: LoginComponent
     },
     {
         path: 'admin-layout',

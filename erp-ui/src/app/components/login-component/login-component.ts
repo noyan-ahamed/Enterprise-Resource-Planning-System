@@ -38,9 +38,6 @@ hidePassword = true;
   
     this.authService.login(form.value).subscribe(
         (res: any)=>{
-          this.userAuthService.setRoles(res.roles)
-          this.userAuthService.setToken(res.token)
-
           const role = res.roles[0]
 
           if(role === 'ADMIN'){
@@ -54,25 +51,5 @@ hidePassword = true;
         (error)=> console.log(error)
       
     )
-
-  // const loginData = {
-  //   email: form.value.userName,
-  //   password: form.value.userPassword
-  // };
-
-  // this.authService.login(loginData).subscribe({
-  //   next: (response) => {
-
-  //     console.log(response);
-
-  //     localStorage.setItem('token', response.token);
-
-  //     this.router.navigate(['/dashboard']);
-  //   },
-
-  //   error: (err) => {
-  //     console.log(err);
-  //   }
-  // });
 }
 }

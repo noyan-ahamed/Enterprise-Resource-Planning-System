@@ -9,7 +9,8 @@ export class UserAuthService {
     localStorage.setItem('roles', JSON.stringify(roles));
   }
   public getRoles(): any[]{
-    return JSON.parse(localStorage.getItem('roles'));
+   // return JSON.parse(localStorage.getItem('roles'));
+      return JSON.parse(localStorage.getItem('roles') || '[]');
   }
 
   public setToken(token: any){

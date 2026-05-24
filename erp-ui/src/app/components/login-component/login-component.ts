@@ -5,6 +5,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { AuthService } from '../../services/auth.service';
+import { UserAuthService } from '../../services/user-auth-service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login-component',
@@ -20,6 +24,10 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './login-component.scss',
 })
 export class LoginComponent {
+  constructor(private authService: AuthService,
+    private userAuthService: UserAuthService,
+    private router: Router
+  ){}
 hidePassword = true;
 
   login(form: NgForm){
@@ -27,9 +35,25 @@ hidePassword = true;
     if(form.invalid){
       return;
     }
-
-    console.log(form.value);
   
+    this.authService.login(form.value).subscribe(
+        (res: any)=>{
+          this.userAuthService.setRoles(res.roles)
+          this.userAuthService.setToken(res.token)
+
+          const role = res.roles[0]
+
+          if(role === 'ADMIN'){
+            this.router.navigate(['/admin-layout'])
+          }else if(role === 'HR'){
+            this.router.navigate(['/hr-dashboard'])
+          }else{
+            this.router.navigate(['/employee-layout'])
+          }
+        },
+        (error)=> console.log(error)
+      
+    )
 
   // const loginData = {
   //   email: form.value.userName,

@@ -14,18 +14,16 @@ export class CustomerLedgerService{
 
   constructor(private http: HttpClient) {}
 
-  // ======================
+
   // Summary Page
-  // ======================
   getCustomerLedgerSummary(): Observable<CustomerLedgerSummary[]> {
     return this.http.get<CustomerLedgerSummary[]>(
       `${this.baseUrl}/due-summary`
     );
   }
 
-  // ======================
+ 
   // Customer Details Page
-  // ======================
   getCustomerLedgerById(customerId: number): Observable<CustomerLedgerEntry[]> {
     return this.http.get<CustomerLedgerEntry[]>(
       `${this.baseUrl}/${customerId}`
@@ -38,14 +36,13 @@ export class CustomerLedgerService{
     );
   }
 
-  // optional - যদি customer master api থাকে
+  // if customer master api available
   getCustomerById(customerId: number): Observable<Customer> {
     return this.customerapi.getCustomerById(customerId);
   }
 
-  // ======================
+
   // Payment
-  // ======================
 //   getSupplierPayments(supplierId: number): Observable<SupplierPayment[]> {
 //     return this.http.get<SupplierPayment[]>(
 //       `${this.paymentUrl}/supplier/${supplierId}`

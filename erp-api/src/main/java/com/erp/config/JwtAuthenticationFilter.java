@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //    }
 
 
-//    for cookies i use this
+//    for cookies i use this, here i get token from cookie not header. 
 @Override
 protected void doFilterInternal(
         @NotNull HttpServletRequest request,

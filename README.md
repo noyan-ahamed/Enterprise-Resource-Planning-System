@@ -170,10 +170,10 @@ Full Stack Developer
 ### Connect With Me
 
 Portfolio:
-noyanahamed.netlify.app
+https://noyanahamed.netlify.app
 
 LinkedIn:
-linkedin.com/in/noyan-ahamed
+https://linkedin.com/in/noyan-ahamed
 
 GitHub:
-github.com/noyan-ahamed
+https://github.com/noyan-ahamed

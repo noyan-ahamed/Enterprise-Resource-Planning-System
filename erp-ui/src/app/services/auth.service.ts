@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserAuthService } from './user-auth-service';
+import { forkJoin } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +14,8 @@ export class AuthService {
   )
 
   constructor(private http: HttpClient,
-  private router: Router
+    private router: Router,
+    private userAuthService: UserAuthService
   ) { }
 
   public login(data: any) {
@@ -20,10 +23,22 @@ export class AuthService {
       `${this.API_URL}/authenticate`,
       data,
       {
-        headers: this.requestHeader,
-        withCredentials: true
+        headers: this.requestHeader
+        // withCredentials: true
       }
     );
+  }
+
+  public roleMatch(allowRoles: string[]): boolean {
+    const userRoles: string[] = this.userAuthService.getRoles();
+    for (let i = 0; i < userRoles.length; i++) {
+      for (let j = 0; j < allowRoles.length; j++) {
+        if (userRoles[i] === allowRoles[j]) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   logout() {

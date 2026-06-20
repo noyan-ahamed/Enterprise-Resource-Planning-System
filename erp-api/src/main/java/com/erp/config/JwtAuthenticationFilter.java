@@ -27,121 +27,121 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
 
-    //this is for flutter, it use headers
+    //this is for flutter or angular local storage, it uses headers
+    @Override
+    protected void doFilterInternal(
+            @NotNull HttpServletRequest request,
+            @NotNull HttpServletResponse response,
+            @NotNull FilterChain filterChain
+    ) throws ServletException, IOException {
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")){
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUserName(jwt);
+
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+
+            if (jwtService.isTokenValid(jwt, userDetails)){
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+                authToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        filterChain.doFilter(request, response);
+
+
+
+    }
+
+
+    //    for cookies i use this, here i get token from cookie not header.
 //    @Override
 //    protected void doFilterInternal(
 //            @NotNull HttpServletRequest request,
 //            @NotNull HttpServletResponse response,
 //            @NotNull FilterChain filterChain
 //    ) throws ServletException, IOException {
-//        final String authHeader = request.getHeader("Authorization");
-//        final String jwt;
-//        final String userEmail;
 //
-//        if (authHeader == null || !authHeader.startsWith("Bearer ")){
+//        String jwt = null;
+//
+//        // FROM COOKIE
+//        if (request.getCookies() != null) {
+//
+//            for (var cookie : request.getCookies()) {
+//
+//                if (cookie.getName().equals("jwt")) {
+//
+//                    jwt = cookie.getValue();
+//                }
+//            }
+//        }
+//
+//        // OPTIONAL FOR FLUTTER / MOBILE
+//        if (jwt == null) {
+//
+//            final String authHeader =
+//                    request.getHeader("Authorization");
+//
+//            if (authHeader != null &&
+//                    authHeader.startsWith("Bearer ")) {
+//
+//                jwt = authHeader.substring(7);
+//            }
+//        }
+//
+//        if (jwt == null) {
 //            filterChain.doFilter(request, response);
 //            return;
 //        }
 //
-//        jwt = authHeader.substring(7);
-//        userEmail = jwtService.extractUserName(jwt);
+//        final String userEmail =
+//                jwtService.extractUserName(jwt);
 //
-//        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
-//            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+//        if (
+//                userEmail != null &&
+//                        SecurityContextHolder
+//                                .getContext()
+//                                .getAuthentication() == null
+//        ) {
 //
-//            if (jwtService.isTokenValid(jwt, userDetails)){
-//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-//                        userDetails,
-//                        null,
-//                        userDetails.getAuthorities()
-//                );
+//            UserDetails userDetails =
+//                    this.userDetailsService
+//                            .loadUserByUsername(userEmail);
+//
+//            if (jwtService.isTokenValid(jwt, userDetails)) {
+//
+//                UsernamePasswordAuthenticationToken authToken =
+//                        new UsernamePasswordAuthenticationToken(
+//                                userDetails,
+//                                null,
+//                                userDetails.getAuthorities()
+//                        );
+//
 //                authToken.setDetails(
-//                        new WebAuthenticationDetailsSource().buildDetails(request)
+//                        new WebAuthenticationDetailsSource()
+//                                .buildDetails(request)
 //                );
-//                SecurityContextHolder.getContext().setAuthentication(authToken);
+//
+//                SecurityContextHolder
+//                        .getContext()
+//                        .setAuthentication(authToken);
 //            }
 //        }
+//
 //        filterChain.doFilter(request, response);
-//
-//
-//
 //    }
-
-
-//    for cookies i use this, here i get token from cookie not header. 
-@Override
-protected void doFilterInternal(
-        @NotNull HttpServletRequest request,
-        @NotNull HttpServletResponse response,
-        @NotNull FilterChain filterChain
-) throws ServletException, IOException {
-
-    String jwt = null;
-
-    // FROM COOKIE
-    if (request.getCookies() != null) {
-
-        for (var cookie : request.getCookies()) {
-
-            if (cookie.getName().equals("jwt")) {
-
-                jwt = cookie.getValue();
-            }
-        }
-    }
-
-    // OPTIONAL FOR FLUTTER / MOBILE
-    if (jwt == null) {
-
-        final String authHeader =
-                request.getHeader("Authorization");
-
-        if (authHeader != null &&
-                authHeader.startsWith("Bearer ")) {
-
-            jwt = authHeader.substring(7);
-        }
-    }
-
-    if (jwt == null) {
-        filterChain.doFilter(request, response);
-        return;
-    }
-
-    final String userEmail =
-            jwtService.extractUserName(jwt);
-
-    if (
-            userEmail != null &&
-                    SecurityContextHolder
-                            .getContext()
-                            .getAuthentication() == null
-    ) {
-
-        UserDetails userDetails =
-                this.userDetailsService
-                        .loadUserByUsername(userEmail);
-
-        if (jwtService.isTokenValid(jwt, userDetails)) {
-
-            UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
-
-            authToken.setDetails(
-                    new WebAuthenticationDetailsSource()
-                            .buildDetails(request)
-            );
-
-            SecurityContextHolder
-                    .getContext()
-                    .setAuthentication(authToken);
-        }
-    }
-
-    filterChain.doFilter(request, response);
-}
 }

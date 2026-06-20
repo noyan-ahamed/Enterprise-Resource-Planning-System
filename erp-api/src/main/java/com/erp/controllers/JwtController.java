@@ -20,7 +20,13 @@ public class JwtController {
 //        return ResponseEntity.ok(service.register(registerRequest));
 //    }
 
+//    this is for local storage
     @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest){
+        return ResponseEntity.ok(service.authenticate(authenticationRequest));
+    }
+
+    @PostMapping("/authenticate-cookies")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest authenticationRequest,
              HttpServletResponse response
@@ -33,7 +39,7 @@ public class JwtController {
 
         cookie.setHttpOnly(true);
 
-        // production এ true
+        // in production this will be true
         cookie.setSecure(false);
         cookie.setPath("/");
 //        cookie.setMaxAge(60 * 60 * 24); //i want when browser or tab close login.

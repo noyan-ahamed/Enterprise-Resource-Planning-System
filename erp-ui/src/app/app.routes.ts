@@ -16,6 +16,8 @@ import { CustomerDueCollectionComponent } from './components/customer-due-collec
 import { ApprovedPaymentComponent } from './components/approved-payment.component/approved-payment.component';
 import { AdminDashboardComponent } from './components/dashboard/admin-dashboard.component/admin-dashboard.component';
 import { LoginComponent } from './components/login-component/login-component';
+import { PageNotFound } from './components/page-not-found/page-not-found';
+import { AuthGuard } from './_auth/auth-guard';
 
 export const routes: Routes = [
     {
@@ -30,16 +32,21 @@ export const routes: Routes = [
     {
         path: 'admin-layout',
         component: AdminLayout,
+        canActivate: [AuthGuard],
+         canActivateChild: [AuthGuard],
+        data: {
+            roles: ['ADMIN']
+        },
         children: [
-           {
-            path: '',
-            redirectTo: 'admin-dashboard',
-            pathMatch: 'full'
-        },
-        {
-            path: 'admin-dashboard',
-            component: AdminDashboardComponent
-        },
+            {
+                path: '',
+                redirectTo: 'admin-dashboard',
+                pathMatch: 'full'
+            },
+            {
+                path: 'admin-dashboard',
+                component: AdminDashboardComponent
+            },
             {
                 path: 'product-category',
                 component: ProductCategory
@@ -91,6 +98,10 @@ export const routes: Routes = [
     {
         path: 'employee-layout',
         component: EmployeeLayout,
+        canActivate: [AuthGuard],
+        data: {
+            roles: ['EMPLOYEE']
+        },
         children: [
             {
                 path: '',
@@ -110,5 +121,13 @@ export const routes: Routes = [
                 component: CustomerDueCollectionComponent
             }
         ]
+    },
+    {
+        path: 'page-not-found',
+        component: PageNotFound
+    },
+    {
+        path: '**',
+        component: PageNotFound
     }
 ];

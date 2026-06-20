@@ -27,29 +27,33 @@ export class LoginComponent {
   constructor(private authService: AuthService,
     private userAuthService: UserAuthService,
     private router: Router
-  ){}
-hidePassword = true;
+  ) { }
+  hidePassword = true;
 
-  login(form: NgForm){
+  login(form: NgForm) {
 
-    if(form.invalid){
+    if (form.invalid) {
       return;
     }
-  
-    this.authService.login(form.value).subscribe(
-        (res: any)=>{
-          const role = res.roles[0]
 
-          if(role === 'ADMIN'){
-            this.router.navigate(['/admin-layout'])
-          }else if(role === 'HR'){
-            this.router.navigate(['/hr-dashboard'])
-          }else{
-            this.router.navigate(['/employee-layout'])
-          }
-        },
-        (error)=> console.log(error)
-      
+    this.authService.login(form.value).subscribe(
+      (res: any) => {
+
+        this.userAuthService.setRoles(res.roles)
+        this.userAuthService.setToken(res.token)
+        const role = res.roles[0];
+
+        if (role === 'ADMIN') {
+          this.router.navigate(['/admin-layout'])
+        } else if (role === 'HR') {
+          this.router.navigate(['/hr-dashboard'])
+        } else {
+          this.router.navigate(['/employee-layout'])
+        }
+      },
+      (error) => console.log(error)
+
+
     )
-}
+  }
 }

@@ -5,26 +5,26 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class UserAuthService {
-  public setRoles(roles:[]){
+  public setRoles(roles: []) {
     localStorage.setItem('roles', JSON.stringify(roles));
   }
-  public getRoles(): any[]{
-   // return JSON.parse(localStorage.getItem('roles'));
-      return JSON.parse(localStorage.getItem('roles') || '[]');
+  public getRoles(): any[] {
+    // return JSON.parse(localStorage.getItem('roles'));
+    return JSON.parse(localStorage.getItem('roles') || '[]');
   }
 
-  public setToken(token: any){
+  public setToken(token: any) {
     localStorage.setItem('token', token)
   }
 
-  public getToken(){
+  public getToken(): any {
     return localStorage.getItem('token')
   }
 
-  public clear(){
+  public clear() {
     localStorage.clear();
   }
-  public isLoggedIn(){
-    return this.getToken() && this.getRoles();
+  public isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 }

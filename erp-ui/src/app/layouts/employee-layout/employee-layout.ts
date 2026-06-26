@@ -7,6 +7,7 @@ import { MatToolbar } from "@angular/material/toolbar";
 import { MatMenu, MatMenuModule } from "@angular/material/menu";
 import { RouterModule } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-employee-layout',
@@ -36,6 +37,11 @@ import { MatButtonModule } from "@angular/material/button";
   styleUrl: './employee-layout.scss',
 })
 export class EmployeeLayout {
+
+  constructor(
+    private authService: AuthService
+  ) {}
+
 activeMenu: string | null = '';
 
   setActive(menu: string) {
@@ -66,6 +72,8 @@ get userInitials(): string {
   onSettings(){
 
   }
-  logout(){}
+  logout(){
+
+  }
 
 }

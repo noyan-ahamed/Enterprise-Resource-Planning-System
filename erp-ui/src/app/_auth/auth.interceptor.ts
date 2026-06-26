@@ -4,47 +4,69 @@ import { UserAuthService } from "../services/user-auth-service";
 import { Router } from "@angular/router";
 import { Injectable } from "@angular/core";
 
+//this is only for jwt token based authentication, not for cookie based authentication
+
+// @Injectable()
+// export class AuthInterceptor implements HttpInterceptor {
+//     constructor(private userAuth: UserAuthService,
+//         private router: Router
+//     ) { }
+//     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+//           console.log('INTERCEPTOR WORKING');
+//         if (req.headers.get('No-Auth') === 'True') {
+//             return next.handle(req.clone());
+//         }
+
+//         const token = this.userAuth.getToken();
+
+//         if (token) {
+//             req = this.addToken(req, token);
+//         }
+
+//         return next.handle(req).pipe(
+//             catchError(
+//                 (err: HttpErrorResponse) => {
+//                     if (err.status === 401) {
+//                         this.router.navigate(['/login-component']);
+//                     } else if (err.status === 403) {
+//                         this.router.navigate(['/forbidden']);
+//                     }
+
+//                     return throwError(() => err);
+
+//                 }
+//             )
+//         )
+//     }
+
+//     private addToken(request: HttpRequest<any>, token: string) {
+//         return request.clone(
+//             {
+//                 setHeaders: {
+//                     Authorization: `Bearer ${token}`
+//                 }
+//             }
+//         )
+//     }
+
+// }
+
+
+
+
 @Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-    constructor(private userAuth: UserAuthService,
-        private router: Router
-    ) { }
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-          console.log('INTERCEPTOR WORKING');
-        if (req.headers.get('No-Auth') === 'True') {
-            return next.handle(req.clone());
-        }
+export class AuthInterceptor
+implements HttpInterceptor {
 
-        const token = this.userAuth.getToken();
+  intercept(
+      req: HttpRequest<any>,
+      next: HttpHandler
+  ) {
 
-        if (token) {
-            req = this.addToken(req, token);
-        }
+    const cloned = req.clone({
+      withCredentials: true
+    });
 
-        return next.handle(req).pipe(
-            catchError(
-                (err: HttpErrorResponse) => {
-                    if (err.status === 401) {
-                        this.router.navigate(['/login-component']);
-                    } else if (err.status === 403) {
-                        this.router.navigate(['/forbidden']);
-                    }
-
-                    return throwError(() => err);
-
-                }
-            )
-        )
-    }
-
-    private addToken(request: HttpRequest<any>, token: string) {
-        return request.clone(
-            {
-                setHeaders: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
-    }
-
+    return next.handle(cloned);
+  }
 }

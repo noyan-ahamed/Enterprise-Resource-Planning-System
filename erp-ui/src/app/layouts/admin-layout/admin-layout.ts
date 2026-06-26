@@ -44,9 +44,9 @@ export class AdminLayout {
 
   logout() {
     // this is for cookies logout end point
-    // this.authService.logout();
-    this.userAuthService.clear();
-    this.router.navigate(['/login-component'])
+    this.authService.logout();
+    // this.userAuthService.clear();
+    // this.router.navigate(['/login-component'])
   }
 
   // Example – compute initials & color

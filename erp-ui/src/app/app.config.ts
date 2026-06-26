@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import {
   provideHttpClient,
@@ -11,6 +11,12 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { AuthInterceptor } from './_auth/auth.interceptor';
 import { AuthService } from './services/auth.service';
+
+export function initializeApp(
+  authService: AuthService
+) {
+  return () => authService.initializeApp();
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,6 +35,11 @@ export const appConfig: ApplicationConfig = {
       multi: true
     },
 
-    AuthService
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AuthService],
+      multi: true
+    }
   ]
 };

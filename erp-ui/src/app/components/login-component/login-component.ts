@@ -30,30 +30,72 @@ export class LoginComponent {
   ) { }
   hidePassword = true;
 
-  login(form: NgForm) {
+  //this is for local storage based authentication, not for cookie based authentication
 
+  // login(form: NgForm) {
+
+  //   if (form.invalid) {
+  //     return;
+  //   }
+
+  //   this.authService.login(form.value).subscribe(
+  //     (res: any) => {
+
+  //       this.userAuthService.setRoles(res.roles)
+  //       this.userAuthService.setToken(res.token)
+  //       const role = res.roles[0];
+
+  //       if (role === 'ADMIN') {
+  //         this.router.navigate(['/admin-layout'])
+  //       } else if (role === 'HR') {
+  //         this.router.navigate(['/hr-dashboard'])
+  //       } else {
+  //         this.router.navigate(['/employee-layout'])
+  //       }
+  //     },
+  //     (error) => console.log(error)
+
+
+  //   )
+  // }
+
+
+
+
+  //this is for cookie based authentication, not for jwt token based authentication
+  login(form: NgForm) {
     if (form.invalid) {
       return;
     }
 
-    this.authService.login(form.value).subscribe(
-      (res: any) => {
+    this.authService.login(form.value)
+      .subscribe(() => {
 
-        this.userAuthService.setRoles(res.roles)
-        this.userAuthService.setToken(res.token)
-        const role = res.roles[0];
+        this.authService
+          .loadCurrentUser()
+          .subscribe((user: any) => {
 
-        if (role === 'ADMIN') {
-          this.router.navigate(['/admin-layout'])
-        } else if (role === 'HR') {
-          this.router.navigate(['/hr-dashboard'])
-        } else {
-          this.router.navigate(['/employee-layout'])
-        }
-      },
-      (error) => console.log(error)
+            this.authService.currentUser.set(user);
 
+            const role = user.roles?.[0];
 
-    )
+            if (!role) {
+              console.error('No role found');
+              return;
+            }
+
+            if (role === 'ADMIN') {
+              this.router.navigate(['/admin-layout']);
+            }
+            else if (role === 'HR') {
+              this.router.navigate(['/hr-layout']);
+            }
+            else {
+              this.router.navigate(['/employee-layout']);
+            }
+
+          });
+
+      });
   }
 }

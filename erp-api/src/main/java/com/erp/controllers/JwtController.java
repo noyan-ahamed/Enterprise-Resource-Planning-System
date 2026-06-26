@@ -41,6 +41,7 @@ public class JwtController {
 
         // in production this will be true
         cookie.setSecure(false);
+        cookie.setAttribute("SameSite", "Lax");
         cookie.setPath("/");
 //        cookie.setMaxAge(60 * 60 * 24); //i want when browser or tab close login.
         response.addCookie(cookie);

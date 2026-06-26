@@ -143,18 +143,13 @@ public class UserServiceImplement implements UserService {
     @Override
     public UserDTO getCurrentUser() {
 
-        Users user =
-                securityUtil.getCurrentUser();
+        Users user = securityUtil.getCurrentUser();
 
         String base64Image = null;
 
         if (user.getProfileImage() != null) {
-
-            base64Image =
-                    Base64.getEncoder()
-                            .encodeToString(
-                                    user.getProfileImage()
-                            );
+            base64Image = Base64.getEncoder()
+                    .encodeToString(user.getProfileImage());
         }
 
         return UserDTO.builder()
@@ -165,10 +160,16 @@ public class UserServiceImplement implements UserService {
                                 ? user.getEmployee().getEmail()
                                 : user.getUsername()
                 )
-                .status(user.getStatus().name())
-                .createdAt(user.getCreated_at().toString())
                 .imageBase64(base64Image)
                 .imageType(user.getProfileImageType())
+                .status(user.getStatus().name())
+                .createdAt(user.getCreated_at().toString())
+                .roles(
+                        user.getRoles()
+                                .stream()
+                                .map(Role::getName)
+                                .toList()
+                )
                 .build();
     }
 
